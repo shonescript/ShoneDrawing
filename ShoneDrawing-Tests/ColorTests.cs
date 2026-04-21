@@ -1,6 +1,5 @@
 ﻿using System;
 using Xunit;
-using SkiaSharp;
 using ShoneDrawing;
 
 namespace ShoneDrawing.Tests
@@ -39,17 +38,6 @@ namespace ShoneDrawing.Tests
         }
 
         [Fact]
-        public void FromSKColor_CreatesColorFromSKColor()
-        {
-            var skColor = new SKColor(10, 20, 30, 40);
-            var color = Color.FromSKColor(skColor);
-            Assert.Equal(40, color.A);
-            Assert.Equal(10, color.R);
-            Assert.Equal(20, color.G);
-            Assert.Equal(30, color.B);
-        }
-
-        [Fact]
         public void IsEmpty_ReturnsTrueForEmptyColor()
         {
             var color = Color.Empty;
@@ -78,11 +66,14 @@ namespace ShoneDrawing.Tests
         }
 
         [Fact]
-        public void ToSKColor_ReturnsUnderlyingSKColor()
+        public void ToMewColor_ReturnsUnderlyingMewColor()
         {
             var color = Color.FromArgb(255, 100, 150, 200);
-            var skColor = color.ToSKColor();
-            Assert.Equal(new SKColor(100, 150, 200, 255), skColor);
+            var mewColor = color.ToMewColor();
+            Assert.Equal(100, mewColor.R);
+            Assert.Equal(150, mewColor.G);
+            Assert.Equal(200, mewColor.B);
+            Assert.Equal(255, mewColor.A);
         }
 
         [Fact]

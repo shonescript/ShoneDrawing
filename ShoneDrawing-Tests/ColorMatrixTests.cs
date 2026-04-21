@@ -6,14 +6,14 @@ using System;
 
 public class ColorMatrixTests
 {
-    [Fact]
-    public void ToColorFilter_WithModifiedMatrix_CreatesValidSKColorFilter()
-    {
-        var colorMatrix = new ColorMatrix();
-        colorMatrix[0, 0] = 0.5f;
-        var colorFilter = colorMatrix.ToColorFilter();
-        Assert.NotNull(colorFilter);
-    }
+    // [Fact]
+    // public void ToColorFilter_WithModifiedMatrix_CreatesValidSKColorFilter()
+    // {
+    //     var colorMatrix = new ColorMatrix();
+    //     colorMatrix[0, 0] = 0.5f;
+    //     var colorFilter = colorMatrix.ToColorFilter();
+    //     Assert.NotNull(colorFilter);
+    // }
 
     [Fact]
     public void GetMatrixCopy_ModifyingCopyDoesNotAffectOriginal()

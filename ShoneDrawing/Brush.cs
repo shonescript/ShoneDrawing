@@ -1,3 +1,6 @@
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
+
 namespace ShoneDrawing
 {
     /// <summary>
@@ -15,6 +18,15 @@ namespace ShoneDrawing
         public Brush(Color color)
         {
             Color = color;
+        }
+
+        /// <summary>
+        /// Converts this Brush to MewUI IBrush.
+        /// </summary>
+        public ISolidColorBrush ToMewBrush()
+        {
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            return graphicsFactory.CreateSolidColorBrush(Color.ToMewColor());
         }
     }
 }

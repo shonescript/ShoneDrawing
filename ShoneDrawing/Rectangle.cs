@@ -1,11 +1,11 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
 
 namespace ShoneDrawing
 {
     /// <summary>
     /// Represents an integer-based rectangle, similar to System.Drawing.Rectangle, 
-    /// but augmented with conversion helpers for SkiaSharp SKRect.
+    /// but augmented with conversion helpers for MewUI Rect.
     /// </summary>
     public struct Rectangle : IEquatable<Rectangle>
     {
@@ -130,19 +130,19 @@ namespace ShoneDrawing
 
         #endregion
 
-        #region Conversion to SkiaSharp
+        #region Conversion to MewUI
 
-        public SKRect ToSKRect()
+        public Aprillz.MewUI.Rect ToMewRect()
         {
-            return new SKRect(X, Y, X + Width, Y + Height);
+            return new Aprillz.MewUI.Rect(X, Y, Width, Height);
         }
 
-        public static Rectangle FromSKRect(SKRect rect)
+        public static Rectangle FromMewRect(Aprillz.MewUI.Rect rect)
         {
-            int x = (int)rect.Left;
-            int y = (int)rect.Top;
-            int w = (int)(rect.Right - rect.Left);
-            int h = (int)(rect.Bottom - rect.Top);
+            int x = (int)rect.X;
+            int y = (int)rect.Y;
+            int w = (int)rect.Width;
+            int h = (int)rect.Height;
             return new Rectangle(x, y, w, h);
         }
 

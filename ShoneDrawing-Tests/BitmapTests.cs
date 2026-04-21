@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using Xunit;
-using SkiaSharp;
 using ShoneDrawing;
 
 namespace ShoneDrawing.Tests
@@ -47,15 +46,6 @@ namespace ShoneDrawing.Tests
         }
 
         [Fact]
-        public void Constructor_WithSKBitmap_CreatesBitmap()
-        {
-            var skBitmap = new SKBitmap(100, 200);
-            var bitmap = new Bitmap(skBitmap);
-            Assert.Equal(100, bitmap.Width);
-            Assert.Equal(200, bitmap.Height);
-        }
-
-        [Fact]
         public void Constructor_WithBitmapAndSize_CreatesScaledBitmap()
         {
             var originalBitmap = new Bitmap(100, 200);
@@ -91,7 +81,7 @@ namespace ShoneDrawing.Tests
         public void GetPixel_ReturnsCorrectColor()
         {
             var bitmap = new Bitmap(100, 200);
-            var color = new SKColor(255, 0, 0, 255);
+            var color = Color.Red;
             bitmap.SetPixel(10, 10, color);
             var retrievedColor = bitmap.GetPixel(10, 10);
             Assert.Equal(color, retrievedColor);
@@ -101,7 +91,7 @@ namespace ShoneDrawing.Tests
         public void SetPixel_SetsCorrectColor()
         {
             var bitmap = new Bitmap(100, 200);
-            var color = new SKColor(255, 0, 0, 255);
+            var color = Color.Red;
             bitmap.SetPixel(10, 10, color);
             var retrievedColor = bitmap.GetPixel(10, 10);
             Assert.Equal(color, retrievedColor);
@@ -142,7 +132,7 @@ namespace ShoneDrawing.Tests
             var bitmap = new Bitmap(100, 200);
             using (var stream = new MemoryStream())
             {
-                bitmap.Save(stream, SKEncodedImageFormat.Png);
+                bitmap.Save(stream, ImageFormat.Png);
                 Assert.True(stream.Length > 0);
             }
         }
@@ -169,13 +159,13 @@ namespace ShoneDrawing.Tests
         {
             using (var bmp = new Bitmap(2, 1))
             {
-                bmp.SetPixel(0, 0, Color.White.ToSKColor());
-                bmp.SetPixel(1, 0, Color.Black.ToSKColor());
+                bmp.SetPixel(0, 0, Color.White);
+                bmp.SetPixel(1, 0, Color.Black);
 
                 bmp.RotateFlip(RotateFlipType.Rotate90FlipNone);
 
-                Assert.Equal(Color.White.ToSKColor(), bmp.GetPixel(0, 0));
-                Assert.Equal(Color.Black.ToSKColor(), bmp.GetPixel(0, 1));
+                Assert.Equal(Color.White, bmp.GetPixel(0, 0));
+                Assert.Equal(Color.Black, bmp.GetPixel(0, 1));
             }
         }
 
@@ -184,13 +174,13 @@ namespace ShoneDrawing.Tests
         {
             using (var bmp = new Bitmap(2, 1))
             {
-                bmp.SetPixel(0, 0, Color.White.ToSKColor());
-                bmp.SetPixel(1, 0, Color.Black.ToSKColor());
+                bmp.SetPixel(0, 0, Color.White);
+                bmp.SetPixel(1, 0, Color.Black);
 
                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipX);
 
-                Assert.Equal(Color.White.ToSKColor(), bmp.GetPixel(1, 0));
-                Assert.Equal(Color.Black.ToSKColor(), bmp.GetPixel(0, 0));
+                Assert.Equal(Color.White, bmp.GetPixel(1, 0));
+                Assert.Equal(Color.Black, bmp.GetPixel(0, 0));
             }
         }
 
@@ -199,13 +189,13 @@ namespace ShoneDrawing.Tests
         {
             using (var bmp = new Bitmap(1, 2))
             {
-                bmp.SetPixel(0, 0, Color.White.ToSKColor());
-                bmp.SetPixel(0, 1, Color.Black.ToSKColor());
+                bmp.SetPixel(0, 0, Color.White);
+                bmp.SetPixel(0, 1, Color.Black);
 
                 bmp.RotateFlip(RotateFlipType.RotateNoneFlipY);
 
-                Assert.Equal(Color.White.ToSKColor(), bmp.GetPixel(0, 1));
-                Assert.Equal(Color.Black.ToSKColor(), bmp.GetPixel(0, 0));
+                Assert.Equal(Color.White, bmp.GetPixel(0, 1));
+                Assert.Equal(Color.Black, bmp.GetPixel(0, 0));
             }
         }
 
@@ -214,13 +204,13 @@ namespace ShoneDrawing.Tests
         {
             using (var bmp = new Bitmap(2, 1))
             {
-                bmp.SetPixel(0, 0, Color.White.ToSKColor());
-                bmp.SetPixel(1, 0, Color.Black.ToSKColor());
+                bmp.SetPixel(0, 0, Color.White);
+                bmp.SetPixel(1, 0, Color.Black);
 
                 bmp.RotateFlip(RotateFlipType.Rotate180FlipNone);
 
-                Assert.Equal(Color.White.ToSKColor(), bmp.GetPixel(1, 0));
-                Assert.Equal(Color.Black.ToSKColor(), bmp.GetPixel(0, 0));
+                Assert.Equal(Color.White, bmp.GetPixel(1, 0));
+                Assert.Equal(Color.Black, bmp.GetPixel(0, 0));
             }
         }
 

@@ -1,24 +1,30 @@
-using SkiaSharp;
+using Aprillz.MewUI;
 
 namespace ShoneDrawing
 {
     /// <summary>
-    /// A color struct that mimics System.Drawing.Color, backed by a SkiaSharp SKColor.
-    /// Includes static named colors, ARGB creation, and a method to convert to SKColor.
+    /// A color struct that mimics System.Drawing.Color, backed by MewUI Color.
+    /// Includes static named colors, ARGB creation, and a method to convert to MewUI Color.
     /// </summary>
     public struct Color
     {
-        private readonly SKColor _color;
+        private readonly byte _alpha;
+        private readonly byte _red;
+        private readonly byte _green;
+        private readonly byte _blue;
         private readonly string _name;
 
         #region Private Constructor
 
         /// <summary>
-        /// Private constructor wrapping a Skia color plus an optional name.
+        /// Private constructor wrapping ARGB components plus an optional name.
         /// </summary>
-        private Color(SKColor color, string name = null)
+        private Color(byte alpha, byte red, byte green, byte blue, string name = null)
         {
-            _color = color;
+            _alpha = alpha;
+            _red = red;
+            _green = green;
+            _blue = blue;
             _name = name;
         }
 
@@ -37,8 +43,7 @@ namespace ShoneDrawing
             if (green < 0) green = 0; if (green > 255) green = 255;
             if (blue < 0)  blue  = 0; if (blue  > 255) blue  = 255;
 
-            var sk = new SKColor((byte)red, (byte)green, (byte)blue, (byte)alpha);
-            return new Color(sk);
+            return new Color((byte)alpha, (byte)red, (byte)green, (byte)blue);
         }
 
         /// <summary>
@@ -57,15 +62,7 @@ namespace ShoneDrawing
         /// <returns>A new Color with the modified alpha value.</returns>
         public static Color FromArgb(byte alpha, Color baseColor)
         {
-            return new Color(new SKColor(baseColor.R, baseColor.G, baseColor.B, alpha), baseColor._name);
-        }
-
-        /// <summary>
-        /// Creates a Color from a SkiaSharp SKColor.
-        /// </summary>
-        public static Color FromSKColor(SKColor skColor)
-        {
-            return new Color(skColor);
+            return new Color(alpha, baseColor.R, baseColor.G, baseColor.B, baseColor._name);
         }
 
         #endregion
@@ -77,8 +74,7 @@ namespace ShoneDrawing
         /// </summary>
         private static Color Named(byte r, byte g, byte b, string name)
         {
-            SKColor sk = new SKColor(r, g, b, 255);
-            return new Color(sk, name);
+            return new Color(255, r, g, b, name);
         }
 
         #endregion
@@ -87,7 +83,7 @@ namespace ShoneDrawing
 
         // A small set of commonly used named colors. Extend as needed.
 
-        public static Color Transparent => new Color(new SKColor(255, 255, 255, 0), "Transparent");
+        public static Color Transparent => new Color(0, 255, 255, 255, "Transparent");
         public static Color Black       => Named(0x00, 0x00, 0x00, "Black");
         public static Color Lime        => Named(0x00, 0xFF, 0x00, "Lime");
         public static Color Blue        => Named(0x00, 0x00, 0xFF, "Blue");
@@ -232,7 +228,7 @@ namespace ShoneDrawing
         
         
         
-        public static Color Empty      =>  new Color(new SKColor(0, 0, 0, 0), "Empty");
+        public static Color Empty      =>  new Color(0, 0, 0, 0, "Empty");
 
         #endregion
 
@@ -241,27 +237,27 @@ namespace ShoneDrawing
         /// <summary>
         /// Gets the alpha component of this color.
         /// </summary>
-        public byte A => _color.Alpha;
+        public byte A => _alpha;
 
         /// <summary>
         /// Gets the red component of this color.
         /// </summary>
-        public byte R => _color.Red;
+        public byte R => _red;
 
         /// <summary>
         /// Gets the green component of this color.
         /// </summary>
-        public byte G => _color.Green;
+        public byte G => _green;
 
         /// <summary>
         /// Gets the blue component of this color.
         /// </summary>
-        public byte B => _color.Blue;
+        public byte B => _blue;
 
         /// <summary>
         /// Indicates whether this Color is empty (i.e., alpha=0 and RGB=0).
         /// </summary>
-        public bool IsEmpty => _color.Equals(default(SKColor));
+        public bool IsEmpty => _alpha == 0 && _red == 0 && _green == 0 && _blue == 0;
 
         /// <summary>
         /// If this color was created as a named color, returns that name;
@@ -285,11 +281,11 @@ namespace ShoneDrawing
         #region Conversion
 
         /// <summary>
-        /// Returns the underlying SkiaSharp SKColor for advanced usage.
+        /// Converts this Color to MewUI Color.
         /// </summary>
-        public SKColor ToSKColor()
+        public Aprillz.MewUI.Color ToMewColor()
         {
-            return _color;
+            return Aprillz.MewUI.Color.FromArgb(A, R, G, B);
         }
 
         /// <summary>
@@ -307,14 +303,14 @@ namespace ShoneDrawing
         public override bool Equals(object obj)
         {
             if (obj is Color c)
-                return _color.Equals(c._color);
+                return _alpha == c._alpha && _red == c._red && _green == c._green && _blue == c._blue;
             return false;
         }
 
         public override int GetHashCode()
         {
-            // Combine the SKColor hash with the optional name's hash
-            return _color.GetHashCode() ^ (_name?.GetHashCode() ?? 0);
+            // Combine the ARGB components hash with the optional name's hash
+            return (_alpha << 24 | _red << 16 | _green << 8 | _blue) ^ (_name?.GetHashCode() ?? 0);
         }
 
         public static bool operator ==(Color left, Color right)

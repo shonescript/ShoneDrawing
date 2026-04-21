@@ -1,10 +1,11 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
-    /// A class that mimics System.Drawing.StringFormat using SkiaSharp for text layout and alignment.
+    /// A class that mimics System.Drawing.StringFormat using MewUI for text layout and alignment.
     /// </summary>
     public class StringFormat : IDisposable
     {
@@ -86,39 +87,15 @@ namespace ShoneDrawing
         };
 
         /// <summary>
-        /// Applies the string format settings to an SKPaint object for SkiaSharp text rendering.
+        /// Applies the string format settings to a MewUI text rendering context.
         /// </summary>
-        public void ApplyTo(SKPaint paint, SKRect textBounds)
+        public void ApplyTo(IFont font, ref Aprillz.MewUI.Rect textBounds)
         {
-            if (paint == null)
-                throw new ArgumentNullException(nameof(paint));
+            if (font == null)
+                throw new ArgumentNullException(nameof(font));
 
-            // Horizontal alignment
-            switch (Alignment)
-            {
-                case StringAlignment.Center:
-                    paint.TextAlign = SKTextAlign.Center;
-                    break;
-                case StringAlignment.Far:
-                    paint.TextAlign = SKTextAlign.Right;
-                    break;
-                case StringAlignment.Near:
-                default:
-                    paint.TextAlign = SKTextAlign.Left;
-                    break;
-            }
-
-            // Right-to-left text direction (affects text positioning)
-            if (DirectionRightToLeft)
-            {
-                paint.TextAlign = SKTextAlign.Right;
-            }
-
-            // Trimming (handled by clipping or ellipsis text replacement)
-            if (Trimming == StringTrimming.EllipsisCharacter || Trimming == StringTrimming.EllipsisWord)
-            {
-                paint.LcdRenderText = true; // Improve text readability for ellipsis
-            }
+            // MewUI handles text alignment through the DrawText method parameters
+            // This method is kept for compatibility with existing code
         }
 
         /// <summary>

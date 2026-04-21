@@ -1,5 +1,6 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
@@ -33,87 +34,74 @@ namespace ShoneDrawing
                 newH = oldW;
             }
 
-            // Create a new SKBitmap with the final dimensions, same color type as the original
-            var oldSKB = bmp.ToSKBitmap();
-            var info = new SKImageInfo(newW, newH, oldSKB.ColorType, oldSKB.AlphaType);
-            var newSKB = new SKBitmap(info);
-
-            // We'll draw the old bitmap into the new one, applying transformations
-            SKCanvas canvas = new SKCanvas(newSKB);
-
-            // Apply transformations
-            // 1) Rotation
-            switch (rotateIndex)
+            // Create a new bitmap with the final dimensions
+            var newBitmap = new Bitmap(newW, newH);
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            using (var context = graphicsFactory.CreateContext(newBitmap.ToRenderTarget()))
             {
-                case 0: // none
-                    break;
-                case 1: // 90
-                    canvas.Translate(newW, 0); // shift right
-                    canvas.RotateDegrees(90);
-                    break;
-                case 2: // 180
-                    canvas.Translate(newW, newH);
-                    canvas.RotateDegrees(180);
-                    break;
-                case 3: // 270
-                    canvas.Translate(0, newH);
-                    canvas.RotateDegrees(270);
-                    break;
+                // Apply transformations
+                // 1) Rotation
+                switch (rotateIndex)
+                {
+                    case 0: // none
+                        break;
+                    case 1: // 90
+                        context.Translate(newW, 0); // shift right
+                        context.Rotate(Math.PI / 2);
+                        break;
+                    case 2: // 180
+                        context.Translate(newW, newH);
+                        context.Rotate(Math.PI);
+                        break;
+                    case 3: // 270
+                        context.Translate(0, newH);
+                        context.Rotate(3 * Math.PI / 2);
+                        break;
+                }
+
+                // 2) Flip
+                switch (flipIndex)
+                {
+                    case 0: // none
+                        break;
+                    case 1: // flip X (horizontal)
+                        context.Scale(-1, 1);
+                        context.Translate(-newW, 0);
+                        break;
+                    case 2: // flip Y (vertical)
+                        context.Scale(1, -1);
+                        context.Translate(0, -newH);
+                        break;
+                    case 3: // flip XY
+                        context.Scale(-1, -1);
+                        context.Translate(-newW, -newH);
+                        break;
+                }
+
+                // Draw the old bitmap at (0,0) after the transformations
+                context.DrawImage(bmp.ToMewImage(), new Aprillz.MewUI.Point(0, 0));
             }
 
-            // 2) Flip
-            switch (flipIndex)
-            {
-                case 0: // none
-                    break;
-                case 1: // flip X (horizontal)
-                    canvas.Scale(-1, 1);
-                    canvas.Translate(-newW, 0);
-                    break;
-                case 2: // flip Y (vertical)
-                    canvas.Scale(1, -1);
-                    canvas.Translate(0, -newH);
-                    break;
-                case 3: // flip XY
-                    canvas.Scale(-1, -1);
-                    canvas.Translate(-newW, -newH);
-                    break;
-            }
-
-            // Draw the old bitmap at (0,0) after the transformations
-            canvas.DrawBitmap(oldSKB, 0, 0);
-            canvas.Dispose();
-
-            // Replace the old SKBitmap in 'bmp' with newSKB
-            // Dispose the old one if desired
-            oldSKB.Dispose();
-
-            // We'll set the new SKBitmap in the 'bmp' object.
-            // For that, we might need a setter or we can do it by re-constructing 'bmp'.
-            // Let's do it by reflection or direct approach. 
-            // If 'bmp' has an internal field 'skBitmap', we can do:
+            // Replace the old image in 'bmp' with the new one
             bmp.Dispose(); // Dispose old references
-            // Now re-construct 'bmp' from the new SKBitmap
-            bmp.ReplaceInternalBitmap(newSKB);
+            // Now re-construct 'bmp' from the new bitmap
+            bmp.ReplaceInternalImage(newBitmap.ToMewImage(), newBitmap.ToRenderTarget());
         }
 
         /// <summary>
-        /// Helper method to replace the internal SKBitmap in the existing Bitmap with a new one.
-        /// We'll add an internal method in the Bitmap to do so. 
-        /// 
-        /// If you don't want to do this, you can make the field 'skBitmap' internal 
-        /// or create a special constructor. 
-        /// For demonstration, let's assume we can do something like this:
+        /// Helper method to replace the internal image in the existing Bitmap with a new one.
         /// </summary>
-        private static void ReplaceInternalBitmap(this Bitmap bmp, SKBitmap newSKB)
+        private static void ReplaceInternalImage(this Bitmap bmp, IImage newImage, IRenderTarget newRenderTarget)
         {
-            // We'll reassign the internal field. We rely on a hypothetical 'SetSKBitmap' method 
-            // or constructor that sets 'skBitmap'. 
-            // We'll do a reflection-based approach for demonstration:
-            var field = typeof(Bitmap).GetField("skBitmap", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (field == null)
-                throw new Exception("Could not find internal field 'skBitmap'.");
-            field.SetValue(bmp, newSKB);
+            // We'll reassign the internal fields using reflection
+            var imageField = typeof(Bitmap).GetField("image", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var renderTargetField = typeof(Bitmap).GetField("renderTarget", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+
+            if (imageField == null || renderTargetField == null)
+                throw new Exception("Could not find internal fields 'image' or 'renderTarget'.");
+
+            imageField.SetValue(bmp, newImage);
+            renderTargetField.SetValue(bmp, newRenderTarget);
         }
     }
 }

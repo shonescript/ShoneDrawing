@@ -1,5 +1,6 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
@@ -57,7 +58,7 @@ namespace ShoneDrawing
             if (b == null)
                 throw new ArgumentNullException(nameof(b));
 
-            // Convert the srcRect and destRect to SkiaSharp's SKRect, 
+            // Convert the srcRect and destRect to MewUI's Rect, 
             // applying a unit-based conversion if necessary.
 
             // We'll assume we use the bitmap's HorizontalResolution / VerticalResolution
@@ -66,48 +67,18 @@ namespace ShoneDrawing
             float dpiY = b.VerticalResolution;  
 
             // Convert rectangles
-            var skSrc = ConvertRect(srcRect, unit, dpiX, dpiY);
-            var skDest = ConvertRect(destRect, unit, dpiX, dpiY);
+            var mewSrc = ConvertRect(srcRect, unit, dpiX, dpiY);
+            var mewDest = ConvertRect(destRect, unit, dpiX, dpiY);
 
-            // Now we can call the existing float-based DrawImage(b, x, y) or the 
-            // underlying Skia call. We'll create a paint with the current InterpolationMode if needed.
-            // We'll do it similarly to "DrawBitmap(..., srcRect, destRect)" approach:
-            using (var paint = new SkiaSharp.SKPaint())
-            {
-                paint.FilterQuality = g.InterpolationMode.ToSKFilterQuality();
-                paint.IsAntialias = true; // or as needed
-                g.DrawImage(b, skSrc, skDest, paint);
-            }
+            // Get the underlying graphics context
+            var context = GetGraphicsContext(g);
+
+            // Draw the image portion
+            context.DrawImage(b.ToMewImage(), mewDest, mewSrc);
         }
 
         
 
-        /// <summary>
-        /// DrawImage override to draw the portion of 'b' from 'skSrc' to 'skDest' 
-        /// using the provided paint. This leverages SkiaSharp's canvas.DrawBitmap API.
-        /// </summary>
-        private static void DrawImage(this Graphics g, Bitmap b, SkiaSharp.SKRect skSrc, SkiaSharp.SKRect skDest, SkiaSharp.SKPaint paint)
-        {
-            // We have a float-based drawImage approach in the Graphics class for a single draw call:
-            // But let's replicate or call a new method. We'll do direct Skia calls here for demonstration.
-
-            // Retrieve the underlying canvas from 'g' (not publicly accessible in the original, so we do reflection or something).
-            // Alternatively, we can create a new method in the Graphics class that draws from SKRect->SKRect.
-            // For demonstration, we use reflection or a helper.
-
-            // Reflection approach to get 'canvas' from 'Graphics'
-            var canvasField = typeof(Graphics).GetField("canvas", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (canvasField == null)
-                throw new Exception("Could not find internal field 'canvas' in Graphics.");
-            var canvasObj = canvasField.GetValue(g);
-            if (canvasObj == null)
-                throw new Exception("The internal 'canvas' is null in Graphics.");
-            var canvas = (SkiaSharp.SKCanvas)canvasObj;
-
-            // Now draw the portion
-            canvas.DrawBitmap(b.ToSKBitmap(), skSrc, skDest, paint);
-        }
-        
         /// <summary>
         /// Draws the entire source bitmap into the specified destination rectangle
         /// on the drawing surface, scaling or shrinking as needed.
@@ -186,38 +157,35 @@ namespace ShoneDrawing
             float dpiX = b.HorizontalResolution;
             float dpiY = b.VerticalResolution;
 
-            // Convert rectangles to Skia's SKRect (float-based)
-            var skSrc = ConvertRect(srcRect, unit, dpiX, dpiY);
-            var skDest = ConvertRect(destRect, unit, dpiX, dpiY);
+            // Convert rectangles to MewUI's Rect (float-based)
+            var mewSrc = ConvertRect(srcRect, unit, dpiX, dpiY);
+            var mewDest = ConvertRect(destRect, unit, dpiX, dpiY);
 
-            // Create a paint that includes filtering (based on g.InterpolationMode) and
-            // possibly a color filter from attributes.
-            using (var paint = new SkiaSharp.SKPaint())
+            // Get the underlying graphics context
+            var context = GetGraphicsContext(g);
+
+            // Apply color filter if needed
+            if (attributes != null)
             {
-                // If you have a method like g.InterpolationMode.ToSKFilterQuality(), call it here:
-                paint.FilterQuality = g.InterpolationMode.ToSKFilterQuality(); 
-                paint.IsAntialias = true;
-
-                // If attributes != null, retrieve color filter
-                if (attributes != null)
+                var colorFilterArray = attributes.GetColorFilterArray();
+                if (colorFilterArray != null)
                 {
-                    var cf = attributes.GetSKColorFilter();
-                    if (cf != null)
-                        paint.ColorFilter = cf;
+                    // Apply color filter to the context
+                    // Note: MewUI's IGraphicsContext may not support color filters directly
+                    // This is a placeholder for future implementation
                 }
-
-                // Now we draw the portion of the bitmap
-                var canvas = GetCanvas(g);
-                canvas.DrawBitmap(b.ToSKBitmap(), skSrc, skDest, paint);
             }
+
+            // Now we draw the portion of the bitmap
+            context.DrawImage(b.ToMewImage(), mewDest, mewSrc);
         }
 
         /// <summary>
-        /// Converts a Rectangle from the specified GraphicsUnit into Skia's SKRect (float-based).
+        /// Converts a Rectangle from the specified GraphicsUnit into MewUI's Rect (float-based).
         /// If unit=Pixel, we use direct integer coords. If unit=Inch, we multiply by dpi, etc.
         /// For demonstration, we handle Pixel, Inch, Millimeter, Point, etc.
         /// </summary>
-        private static SkiaSharp.SKRect ConvertRect(Rectangle r, GraphicsUnit unit, float dpiX, float dpiY)
+        private static Aprillz.MewUI.Rect ConvertRect(Rectangle r, GraphicsUnit unit, float dpiX, float dpiY)
         {
             float x = r.X;
             float y = r.Y;
@@ -275,22 +243,22 @@ namespace ShoneDrawing
                     break;
             }
 
-            return new SkiaSharp.SKRect(x, y, x + w, y + h);
+            return new Aprillz.MewUI.Rect(x, y, w, h);
         }
 
         /// <summary>
-        /// Retrieves the internal SKCanvas from the Graphics object via reflection,
+        /// Retrieves the internal IGraphicsContext from the Graphics object via reflection,
         /// or throws if not found.
         /// </summary>
-        private static SkiaSharp.SKCanvas GetCanvas(Graphics g)
+        private static IGraphicsContext GetGraphicsContext(Graphics g)
         {
-            var canvasField = typeof(Graphics).GetField("canvas", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            if (canvasField == null)
-                throw new Exception("Could not find internal field 'canvas' in Graphics.");
-            var canvasObj = canvasField.GetValue(g);
-            if (canvasObj == null)
-                throw new Exception("The internal 'canvas' is null in Graphics.");
-            return (SkiaSharp.SKCanvas)canvasObj;
+            var contextField = typeof(Graphics).GetField("graphicsContext", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            if (contextField == null)
+                throw new Exception("Could not find internal field 'graphicsContext' in Graphics.");
+            var contextObj = contextField.GetValue(g);
+            if (contextObj == null)
+                throw new Exception("The internal 'graphicsContext' is null in Graphics.");
+            return (IGraphicsContext)contextObj;
         }
         
         /// <summary>
@@ -307,27 +275,23 @@ namespace ShoneDrawing
             if (b == null)
                 throw new ArgumentNullException(nameof(b));
 
-            // Obtain the underlying SKCanvas from the Graphics object via reflection.
-            var canvas = GetCanvas(g);
+            // Obtain the underlying IGraphicsContext from the Graphics object via reflection.
+            var context = GetGraphicsContext(g);
 
-            // Create an SKPaint from the brush.
-            // We'll dispose it immediately after use (no 'using' statements, per your style).
-            var paint = b.ToSKPaint();
+            // Create a rect from the Rectangle
+            var rect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
 
             // Draw the rectangle
-            canvas.DrawRect(r.X, r.Y, r.Width, r.Height, paint);
-
-            // Dispose the paint
-            paint.Dispose();
+            context.FillRectangle(rect, b.ToMewBrush());
         }
         
         
         /// <summary>
-        /// Fills the specified rectangle on the drawing surface with a linear gradient,
-        /// using the given LinearGradientBrush.
+        /// Fills the specified rectangle on the drawing surface with a solid color,
+        /// using the given SolidBrush.
         /// </summary>
         /// <param name="g">The Graphics object on which to draw.</param>
-        /// <param name="b">The SolidBrush defining the gradient fill.</param>
+        /// <param name="b">The SolidBrush defining the fill color.</param>
         /// <param name="r">An integer-based Rectangle specifying the area to fill.</param>
         public static void FillRectangle(this Graphics g, SolidBrush b, Rectangle r)
         {
@@ -336,18 +300,14 @@ namespace ShoneDrawing
             if (b == null)
                 throw new ArgumentNullException(nameof(b));
 
-            // Obtain the underlying SKCanvas from the Graphics object via reflection.
-            var canvas = GetCanvas(g);
+            // Obtain the underlying IGraphicsContext from the Graphics object via reflection.
+            var context = GetGraphicsContext(g);
 
-            // Create an SKPaint from the brush.
-            // We'll dispose it immediately after use (no 'using' statements, per your style).
-            var paint = b.ToSKPaint();
+            // Create a rect from the Rectangle
+            var rect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
 
             // Draw the rectangle
-            canvas.DrawRect(r.X, r.Y, r.Width, r.Height, paint);
-
-            // Dispose the paint
-            paint.Dispose();
+            context.FillRectangle(rect, b.ToMewBrush());
         }
         
         
@@ -358,7 +318,7 @@ namespace ShoneDrawing
         /// using the specified CopyPixelOperation (which is SourceCopy here).
         /// 
         /// Note: This method is a stub demonstrating signature only, 
-        /// as SkiaSharp does not provide cross-platform screen capture.
+        /// as MewUI does not provide cross-platform screen capture.
         /// Real usage would require platform-specific code (e.g., Windows GDI BitBlt).
         /// </summary>
         public static void CopyFromScreen(
@@ -384,10 +344,10 @@ namespace ShoneDrawing
             // 
             //  1) On Windows: 
             //     - P/Invoke BitBlt from the screen DC to an offscreen HDC, 
-            //       then create an SKBitmap from that HDC, 
-            //       then draw to the Graphics's SKCanvas.
+            //       then create an image from that HDC, 
+            //       then draw to the Graphics's context.
             //  2) On macOS: 
-            //     - Use CGDisplay, capture a CGImage, convert to Skia, etc.
+            //     - Use CGDisplay, capture a CGImage, convert to MewUI image, etc.
             //  3) On Linux or other OS: 
             //     - There's no universal approach. Possibly X11 calls, etc.
             // 
@@ -452,56 +412,14 @@ namespace ShoneDrawing
 
             g.CheckDisposed();
 
-            using (SKPaint paint = font.ToSKPaint(96f)) // Assume 96 DPI scaling
-            {
-                // Apply the brush color
-                paint.Color = brush.Color.ToSKColor();
+            // Get the underlying graphics context
+            var context = GetGraphicsContext(g);
 
-                // Measure text bounds
-                SKRect textBounds = new SKRect();
-                paint.MeasureText(text, ref textBounds);
+            // Create a bounds rectangle
+            var bounds = new Aprillz.MewUI.Rect(point.X, point.Y, float.MaxValue, font.Size * 1.5f);
 
-                float x = point.X;
-                float y = point.Y;
-
-                // Apply StringFormat settings
-                format.ApplyTo(paint, textBounds);
-
-                // Adjust vertical alignment
-                switch (format.LineAlignment)
-                {
-                    case StringAlignment.Center:
-                        y -= textBounds.MidY;
-                        break;
-                    case StringAlignment.Far:
-                        y -= textBounds.Bottom;
-                        break;
-                }
-
-                // Adjust horizontal alignment
-                switch (format.Alignment)
-                {
-                    case StringAlignment.Center:
-                        x -= textBounds.MidX;
-                        break;
-                    case StringAlignment.Far:
-                        x -= textBounds.Right;
-                        break;
-                }
-
-                // Draw the text
-                g.ToSKCanvas().DrawText(text, x, y, paint);
-            }
-        }
-
-        /// <summary>
-        /// Helper to get the underlying SKCanvas from a Graphics object.
-        /// </summary>
-        private static SKCanvas ToSKCanvas(this Graphics g)
-        {
-            return (SKCanvas)g.GetType()
-                              .GetField("canvas", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance)
-                              ?.GetValue(g);
+            // Draw the text
+            context.DrawText(text.AsSpan(), bounds, font.ToMewFont(), brush.Color.ToMewColor());
         }
 
         /// <summary>
@@ -529,16 +447,14 @@ namespace ShoneDrawing
 
             g.CheckDisposed();
 
-            using (SKPaint paint = new SKPaint
-                   {
-                       Color = p.Color.ToSKColor(),
-                       Style = SKPaintStyle.Stroke,
-                       StrokeWidth = p.Width,
-                       IsAntialias = true
-                   })
-            {
-                g.ToSKCanvas().DrawRect(r.X, r.Y, r.Width, r.Height, paint);
-            }
+            // Get the underlying graphics context
+            var context = GetGraphicsContext(g);
+
+            // Create a rect from the Rectangle
+            var rect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
+
+            // Draw the rectangle
+            context.DrawRectangle(rect, p.Color.ToMewColor(), p.Width);
         }
         
         /// <summary>
@@ -556,15 +472,14 @@ namespace ShoneDrawing
 
             g.CheckDisposed();
 
-            using (SKPaint paint = new SKPaint
-                   {
-                       Color = b.Color.ToSKColor(),
-                       Style = SKPaintStyle.Fill,
-                       IsAntialias = true
-                   })
-            {
-                g.ToSKCanvas().DrawRect(r.X, r.Y, r.Width, r.Height, paint);
-            }
+            // Get the underlying graphics context
+            var context = GetGraphicsContext(g);
+
+            // Create a rect from the RectangleF
+            var rect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
+
+            // Draw the rectangle
+            context.FillRectangle(rect, b.ToMewBrush());
         }
         
     }

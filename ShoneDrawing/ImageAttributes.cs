@@ -1,5 +1,5 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
@@ -119,19 +119,19 @@ namespace ShoneDrawing
         #region Create Color Filter (Simplified)
 
         /// <summary>
-        /// Creates or returns an SKColorFilter that merges the current 
+        /// Creates or returns a color filter array that merges the current 
         /// color matrix and possibly other adjustments (e.g. gamma).
         /// In a real implementation, you'd combine gamma, color keys, etc. 
         /// Here, we just demonstrate color matrix usage.
         /// </summary>
-        /// <returns>An SKColorFilter, or null if no filter is needed.</returns>
-        public SKColorFilter GetSKColorFilter()
+        /// <returns>A color filter array, or null if no filter is needed.</returns>
+        public float[] GetColorFilterArray()
         {
             // 1) If we have a color matrix, create that filter
             if (hasColorMatrix)
             {
-                // Convert to Skia's color filter
-                return colorMatrix.ToColorFilter();
+                // Convert to MewUI's color filter array
+                return colorMatrix.ToColorFilterArray();
             }
 
             // 2) If we had gamma or color key, we'd do more advanced logic. 

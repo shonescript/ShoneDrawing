@@ -7,7 +7,7 @@
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <LangVersion>12</LangVersion>
         <Title>ShoneDrawing</Title>
-        <Description>This library is meant to be a drop-in replacement for System.Drawing witch is not multi plaftform since version 6. It uses SkiaSharp as it's engine and re-implement the classes of System.Drawing.</Description>
+        <Description>This library is meant to be a drop-in replacement for System.Drawing witch is not multi plaftform since version 6. It uses MewUI as it's engine and re-implement the classes of System.Drawing.</Description>
         <Copyright>2025 - Felipe Quintella</Copyright>
         <PackageProjectUrl>https://github.com/ffquintella/ShoneDrawing</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/ffquintella/ShoneDrawing/blob/main/LICENSE</PackageLicenseUrl>
@@ -20,7 +20,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <PackageReference Include="SkiaSharp" Version="3.119.2" />
+      <ProjectReference Include="..\..\src\MewUI\MewUI.csproj" />
     </ItemGroup>
 
 </Project>

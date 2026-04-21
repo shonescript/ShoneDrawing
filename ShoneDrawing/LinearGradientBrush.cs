@@ -1,11 +1,12 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
     /// A brush that paints an area with a linear gradient between two points,
-    /// mimicking System.Drawing.Drawing2D.LinearGradientBrush using SkiaSharp.
+    /// mimicking System.Drawing.Drawing2D.LinearGradientBrush using MewUI.
     /// </summary>
     public sealed class LinearGradientBrush : Brush, IDisposable
     {
@@ -75,35 +76,25 @@ namespace ShoneDrawing
         #endregion
 
         /// <summary>
-        /// Creates or returns an SKPaint for filling with a linear gradient 
+        /// Creates or returns an IBrush for filling with a linear gradient 
         /// from StartPoint to EndPoint between Color1 and Color2.
         /// </summary>
-        public SKPaint ToSKPaint()
+        public IBrush ToMewBrush()
         {
             CheckDisposed();
 
-            SKPoint skStart = startPoint.ToSKPoint();
-            SKPoint skEnd   = endPoint.ToSKPoint();
+            var start = new Aprillz.MewUI.Point((double)startPoint.X, (double)startPoint.Y);
+            var end = new Aprillz.MewUI.Point((double)endPoint.X, (double)endPoint.Y);
 
-            SKColor[] colors = new SKColor[] { color1.ToSKColor(), color2.ToSKColor() };
-            float[] colorPositions = new float[] { 0.0f, 1.0f };
-
-            SKShader shader = SKShader.CreateLinearGradient(
-                skStart,
-                skEnd,
-                colors,
-                colorPositions,
-                SKShaderTileMode.Clamp 
-            );
-
-            SKPaint paint = new SKPaint
+            var colors = new Aprillz.MewUI.Color[] { color1.ToMewColor(), color2.ToMewColor() };
+            var stops = new GradientStop[] 
             {
-                Shader = shader,
-                IsAntialias = true,
-                Style = SKPaintStyle.Fill
+                new GradientStop(0.0f, colors[0]),
+                new GradientStop(1.0f, colors[1])
             };
 
-            return paint;
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            return graphicsFactory.CreateLinearGradientBrush(start, end, stops);
         }
 
         #region Dispose
@@ -124,11 +115,6 @@ namespace ShoneDrawing
 
         #endregion
 
-        //public override string ToString()
-        //{
-        //    return $"LinearGradientBrush [ Start={startPoint}, End={endPoint}, Color1={color1}, Color2={color2} ]";
-        //}
-        
         public override string ToString()
         {
             return $"LinearGradientBrush [ Start=PointF {{ X={startPoint.X}, Y={startPoint.Y} }}, End=PointF {{ X={endPoint.X}, Y={endPoint.Y} }}, Color1=Color [{color1}], Color2=Color [{color2}] ]";

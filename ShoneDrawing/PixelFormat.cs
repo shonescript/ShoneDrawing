@@ -2,7 +2,7 @@ namespace ShoneDrawing
 {
     /// <summary>
     /// A simplified version of System.Drawing.Imaging.PixelFormat,
-    /// mapped to SkiaSharp's SKColorType where possible.
+    /// mapped to MewUI's pixel formats where possible.
     /// </summary>
     public enum PixelFormat
     {

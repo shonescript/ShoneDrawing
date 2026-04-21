@@ -1,11 +1,11 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
     /// A brush that paints an area with a solid color,
-    /// mimicking System.Drawing.SolidBrush using SkiaSharp.
+    /// mimicking System.Drawing.SolidBrush using MewUI.
     /// </summary>
     public sealed class SolidBrush : Brush, IDisposable
     {
@@ -25,20 +25,16 @@ namespace ShoneDrawing
         }
 
         /// <summary>
-        /// Creates or returns a SkiaSharp SKPaint for filling with this brush's color.
+        /// Creates or returns a MewUI IBrush for filling with this brush's color.
         /// Typically used internally by Graphics methods.
         /// </summary>
-        public SKPaint ToSKPaint()
+        public IBrush ToMewBrush()
         {
             if (disposed)
                 throw new ObjectDisposedException(nameof(SolidBrush));
 
-            return new SKPaint
-            {
-                Color = Color.ToSKColor(),
-                Style = SKPaintStyle.Fill,
-                IsAntialias = true
-            };
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            return graphicsFactory.CreateSolidColorBrush(Color.ToMewColor());
         }
 
         /// <summary>

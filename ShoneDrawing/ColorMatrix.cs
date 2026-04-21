@@ -1,11 +1,11 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
     /// Mimics the System.Drawing.Imaging.ColorMatrix (a 5x5 matrix for ARGB transformations).
-    /// Also provides a method to convert to a SkiaSharp color filter (SKColorFilter).
+    /// Also provides a method to convert to a MewUI color filter.
     /// </summary>
     public class ColorMatrix
     {
@@ -98,25 +98,25 @@ namespace ShoneDrawing
 
         #endregion
 
-        #region Convert to SkiaSharp Filter
+        #region Convert to MewUI Filter
 
         /// <summary>
-        /// Creates a SkiaSharp color filter (SKColorFilter) using the current 5x5 matrix.
+        /// Creates a color filter array using the current 5x5 matrix.
         /// This can be used to apply the color transform in drawing operations.
         /// </summary>
-        public SKColorFilter ToColorFilter()
+        public float[] ToColorFilterArray()
         {
-            // Skia expects a 20-element float array in row-major order for the top 4 rows x 5 columns.
-            float[] skiaArray = new float[20];
+            // MewUI expects a 20-element float array in row-major order for the top 4 rows x 5 columns.
+            float[] mewArray = new float[20];
             int index = 0;
             for (int r = 0; r < 4; r++)
             {
                 for (int c = 0; c < 5; c++)
                 {
-                    skiaArray[index++] = matrix[r, c];
+                    mewArray[index++] = matrix[r, c];
                 }
             }
-            return SKColorFilter.CreateColorMatrix(skiaArray);
+            return mewArray;
         }
 
         #endregion

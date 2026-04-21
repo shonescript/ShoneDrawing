@@ -1,3 +1,6 @@
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
+
 namespace ShoneDrawing
 {
     /// <summary>
@@ -14,6 +17,15 @@ namespace ShoneDrawing
         {
             Color = color;
             Width = width;
+        }
+
+        /// <summary>
+        /// Converts this Pen to MewUI IPen.
+        /// </summary>
+        public IPen ToMewPen()
+        {
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            return graphicsFactory.CreatePen(Color.ToMewColor(), Width);
         }
 
         public void Dispose()

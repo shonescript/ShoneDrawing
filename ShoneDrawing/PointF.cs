@@ -1,11 +1,12 @@
 using System;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
     /// A structure that represents an x- and y-coordinate pair in floating-point.
-    /// Mimics System.Drawing.PointF but uses SkiaSharp interop methods.
+    /// Mimics System.Drawing.PointF but uses MewUI interop methods.
     /// </summary>
     public struct PointF : IEquatable<PointF>
     {
@@ -42,22 +43,22 @@ namespace ShoneDrawing
 
         #endregion
 
-        #region Conversion to/from SkiaSharp
+        #region Conversion to/from MewUI
 
         /// <summary>
-        /// Converts this PointF to an SKPoint (SkiaSharp).
+        /// Converts this PointF to a MewUI Point.
         /// </summary>
-        public SKPoint ToSKPoint()
+        public Aprillz.MewUI.Point ToMewPoint()
         {
-            return new SKPoint(X, Y);
+            return new Aprillz.MewUI.Point((double)X, (double)Y);
         }
 
         /// <summary>
-        /// Creates a PointF from an SKPoint.
+        /// Creates a PointF from a MewUI Point.
         /// </summary>
-        public static PointF FromSKPoint(SKPoint pt)
+        public static PointF FromMewPoint(Aprillz.MewUI.Point pt)
         {
-            return new PointF(pt.X, pt.Y);
+            return new PointF((float)pt.X, (float)pt.Y);
         }
 
         #endregion

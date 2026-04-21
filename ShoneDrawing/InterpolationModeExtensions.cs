@@ -1,41 +1,39 @@
-using SkiaSharp;
-
 namespace ShoneDrawing
 {
     public static class InterpolationModeExtensions
     {
         /// <summary>
-        /// Converts an InterpolationMode to a SkiaSharp SKFilterQuality.
+        /// Converts an InterpolationMode to a MewUI compatible value.
         /// </summary>
         /// <param name="mode">The InterpolationMode to convert.</param>
-        /// <returns>A corresponding SKFilterQuality.</returns>
-        public static SKFilterQuality ToSKFilterQuality(this InterpolationMode mode)
+        /// <returns>A corresponding value for MewUI.</returns>
+        public static int ToMewInterpolationMode(this InterpolationMode mode)
         {
             switch (mode)
             {
                 case InterpolationMode.Low:
                 case InterpolationMode.NearestNeighbor:
                     // Possibly no smoothing
-                    return SKFilterQuality.None;
+                    return 0;
 
                 case InterpolationMode.Bilinear:
                 case InterpolationMode.Default:
                     // Basic smoothing
-                    return SKFilterQuality.Low;
+                    return 1;
 
                 case InterpolationMode.Bicubic:
-                    // You can choose Medium or High based on preference
-                    return SKFilterQuality.Medium;
+                    // Medium quality
+                    return 2;
 
                 case InterpolationMode.High:
                 case InterpolationMode.HighQualityBilinear:
                 case InterpolationMode.HighQualityBicubic:
                     // Highest quality smoothing
-                    return SKFilterQuality.High;
+                    return 3;
 
                 // If not recognized, default to Low
                 default:
-                    return SKFilterQuality.Low;
+                    return 1;
             }
         }
     }

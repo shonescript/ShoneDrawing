@@ -1,15 +1,16 @@
 using System;
 using System.IO;
-using SkiaSharp;
+using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering;
 
 namespace ShoneDrawing
 {
     /// <summary>
-    /// A simplified class that mimics System.Drawing.Image using SkiaSharp for pixel data.
+    /// A simplified class that mimics System.Drawing.Image using MewUI for pixel data.
     /// </summary>
     public class Image : IDisposable
     {
-        protected SKBitmap skBitmap;
+        protected IImage mewImage;
 
         protected float horizontalResolution = 96.0f;
         protected float verticalResolution = 96.0f;
@@ -27,13 +28,13 @@ namespace ShoneDrawing
         }
 
         /// <summary>
-        /// Constructs an Image from an existing SKBitmap.
+        /// Constructs an Image from an existing IImage.
         /// </summary>
-        public Image(SKBitmap bitmap)
+        public Image(IImage image)
         {
-            if (bitmap == null)
-                throw new ArgumentNullException(nameof(bitmap));
-            skBitmap = bitmap;
+            if (image == null)
+                throw new ArgumentNullException(nameof(image));
+            mewImage = image;
         }
 
         #endregion
@@ -45,14 +46,15 @@ namespace ShoneDrawing
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
 
-            using var fs = File.OpenRead(filename);
-            SKBitmap bmp = SKBitmap.Decode(fs);
-            if (bmp == null)
+            var bytes = File.ReadAllBytes(filename);
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            IImage img = graphicsFactory.CreateImageFromBytes(bytes);
+            if (img == null)
                 throw new Exception($"Failed to decode image from file: {filename}");
-            Image img = new Image(bmp);
+            Image result = new Image(img);
 
             // Could parse metadata for DPI here
-            return img;
+            return result;
         }
 
         public static Image FromStream(Stream stream)
@@ -60,13 +62,17 @@ namespace ShoneDrawing
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            SKBitmap bmp = SKBitmap.Decode(stream);
-            if (bmp == null)
+            using var ms = new MemoryStream();
+            stream.CopyTo(ms);
+            var bytes = ms.ToArray();
+            var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
+            IImage img = graphicsFactory.CreateImageFromBytes(bytes);
+            if (img == null)
                 throw new Exception("Failed to decode image from stream.");
-            Image img = new Image(bmp);
+            Image result = new Image(img);
 
             // Could parse metadata for DPI here
-            return img;
+            return result;
         }
 
         #endregion
@@ -78,7 +84,7 @@ namespace ShoneDrawing
             get
             {
                 CheckDisposed();
-                return skBitmap?.Width ?? 0;
+                return mewImage?.PixelWidth ?? 0;
             }
         }
 
@@ -87,7 +93,7 @@ namespace ShoneDrawing
             get
             {
                 CheckDisposed();
-                return skBitmap?.Height ?? 0;
+                return mewImage?.PixelHeight ?? 0;
             }
         }
 
@@ -107,31 +113,24 @@ namespace ShoneDrawing
 
         #region Save Methods
 
-        public virtual void Save(string filename, SKEncodedImageFormat format, int quality = 100)
+        public virtual void Save(string filename, ImageFormat format, int quality = 100)
         {
             CheckDisposed();
             if (string.IsNullOrEmpty(filename))
                 throw new ArgumentNullException(nameof(filename));
 
-            using var data = skBitmap.Encode(format, quality);
-            if (data == null)
-                throw new Exception("Failed to encode the bitmap.");
-
-            using var fs = File.OpenWrite(filename);
-            data.SaveTo(fs);
+            // TODO: Implement Save for MewUI
+            throw new NotImplementedException("Save is not implemented for MewUI Image");
         }
 
-        public virtual void Save(Stream stream, SKEncodedImageFormat format, int quality = 100)
+        public virtual void Save(Stream stream, ImageFormat format, int quality = 100)
         {
             CheckDisposed();
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
-            using var data = skBitmap.Encode(format, quality);
-            if (data == null)
-                throw new Exception("Failed to encode the bitmap.");
-
-            data.SaveTo(stream);
+            // TODO: Implement Save for MewUI
+            throw new NotImplementedException("Save is not implemented for MewUI Image");
         }
 
         #endregion
@@ -177,10 +176,10 @@ namespace ShoneDrawing
             if (!disposed)
             {
                 disposed = true;
-                if (skBitmap != null)
+                if (mewImage != null)
                 {
-                    skBitmap.Dispose();
-                    skBitmap = null;
+                    mewImage.Dispose();
+                    mewImage = null;
                 }
             }
         }
@@ -195,10 +194,10 @@ namespace ShoneDrawing
 
         #region Utilities
 
-        public virtual SKBitmap ToSKBitmap()
+        public virtual IImage ToMewImage()
         {
             CheckDisposed();
-            return skBitmap;
+            return mewImage;
         }
 
         public override string ToString()
