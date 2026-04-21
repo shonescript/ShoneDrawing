@@ -49,8 +49,8 @@ public class Image : IDisposable
     public static Image FromFile(string filename)
     {
         var bytes = File.ReadAllBytes(filename);
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        IImage img = graphicsFactory.CreateImageFromBytes(bytes);
+        
+        IImage img = Graphics.Factory.CreateImageFromBytes(bytes);
         if (img == null)
             throw new Exception($"Failed to decode image from file: {filename}");
         Image result = new Image(img);
@@ -63,8 +63,8 @@ public class Image : IDisposable
         using var ms = new MemoryStream();
         stream.CopyTo(ms);
         var bytes = ms.ToArray();
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        IImage img = graphicsFactory.CreateImageFromBytes(bytes);
+        
+        IImage img = Graphics.Factory.CreateImageFromBytes(bytes);
         if (img == null)
             throw new Exception("Failed to decode image from stream.");
         Image result = new Image(img);

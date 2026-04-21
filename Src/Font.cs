@@ -38,8 +38,8 @@ public class Font : IDisposable
         var isStrikethrough = (style & FontStyle.Strikeout) != 0;
 
         // Use graphics factory to create font
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        mewFont = graphicsFactory.CreateFont(familyName, emSize, weight, isItalic, isUnderline, isStrikethrough);
+        
+        mewFont = Graphics.Factory.CreateFont(familyName, emSize, weight, isItalic, isUnderline, isStrikethrough);
     }
 
     /// <summary>

@@ -27,7 +27,7 @@ public class Brush
     /// </summary>
     public ISolidColorBrush ToMewBrush()
     {
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        return graphicsFactory.CreateSolidColorBrush(Color.ToMewColor());
+        
+        return Graphics.Factory.CreateSolidColorBrush(Color.ToMewColor());
     }
 }

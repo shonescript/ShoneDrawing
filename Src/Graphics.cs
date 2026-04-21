@@ -14,6 +14,7 @@ namespace Shone.Drawing;
 #endif
 public class Graphics : IDisposable
 {
+    public static IGraphicsFactory Factory;
     private IGraphicsContext graphicsContext;
     private bool disposed;
 
@@ -33,8 +34,8 @@ public class Graphics : IDisposable
     public static Graphics FromImage(Bitmap bitmap)
     {
         var renderTarget = bitmap.ToRenderTarget();
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        var context = graphicsFactory.CreateContext(renderTarget);
+        
+        var context = Factory.CreateContext(renderTarget);
         return new Graphics(context);
     }
 
@@ -88,8 +89,8 @@ public class Graphics : IDisposable
     public void DrawString(string text, float x, float y, Color color, float textSize = 16)
     {
         var bounds = new Aprillz.MewUI.Rect(x, y, float.MaxValue, textSize * 1.5f);
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        var font = graphicsFactory.CreateFont("Arial", textSize);
+        
+        var font = Factory.CreateFont("Arial", textSize);
         graphicsContext.DrawText(text.AsSpan(), bounds, font, color.ToMewColor());
     }
 

@@ -75,8 +75,8 @@ public class Icon : IDisposable
     public Bitmap ToBitmap()
     {
         var bitmap = new Bitmap(image.PixelWidth, image.PixelHeight);
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        using (var context = graphicsFactory.CreateContext(bitmap.ToRenderTarget()))
+        
+        using (var context = Graphics.Factory.CreateContext(bitmap.ToRenderTarget()))
         {
             context.DrawImage(image, new Aprillz.MewUI.Point(0, 0));
         }

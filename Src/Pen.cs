@@ -26,8 +26,8 @@ public class Pen: IDisposable
     /// </summary>
     public IPen ToMewPen()
     {
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        return graphicsFactory.CreatePen(Color.ToMewColor(), Width);
+        
+        return Graphics.Factory.CreatePen(Color.ToMewColor(), Width);
     }
 
     public void Dispose()

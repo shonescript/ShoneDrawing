@@ -32,8 +32,8 @@ public static class BitmapExtensions
 
         // Create a new bitmap with the final dimensions
         var newBitmap = new Bitmap(newW, newH);
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        using (var context = graphicsFactory.CreateContext(newBitmap.ToRenderTarget()))
+        
+        using (var context = Graphics.Factory.CreateContext(newBitmap.ToRenderTarget()))
         {
             // Apply transformations
             // 1) Rotation

@@ -35,8 +35,8 @@ public sealed class SolidBrush : Brush, IDisposable
         if (disposed)
             throw new ObjectDisposedException(nameof(SolidBrush));
 
-        var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-        return graphicsFactory.CreateSolidColorBrush(Color.ToMewColor());
+        
+        return Graphics.Factory.CreateSolidColorBrush(Color.ToMewColor());
     }
 
     /// <summary>
