@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A simplified version of System.Drawing.Imaging.ImageFormat, mapped to MewUI's ImageFormat.

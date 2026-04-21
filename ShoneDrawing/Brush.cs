@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A minimal stand-in for System.Drawing.Brush, used for filling shapes.

@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Specifies text layout information and display options,

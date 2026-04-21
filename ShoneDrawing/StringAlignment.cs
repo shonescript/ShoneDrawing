@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Defines text alignment in a layout box, mimicking System.Drawing.StringAlignment.

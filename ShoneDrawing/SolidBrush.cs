@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A brush that paints an area with a solid color,

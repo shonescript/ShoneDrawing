@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A simple class that mimics System.Drawing.Imaging.BitmapData for locked bitmap regions.

@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Mimics System.Drawing.Imaging.ImageAttributes in a simplified manner,

@@ -5,12 +5,12 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-        <Title>ShoneDrawing</Title>
+        <Title>Shone.Drawing</Title>
         <Description>This library is meant to be a drop-in replacement for System.Drawing witch is not multi plaftform since version 6. It uses MewUI as it's engine and re-implement the classes of System.Drawing.</Description>
         <Copyright>2026, Shone</Copyright>
-        <PackageProjectUrl>https://github.com/ShoneScript/ShoneDrawing</PackageProjectUrl>
-        <PackageLicenseUrl>https://github.com/ShoneScript/ShoneDrawing/blob/main/LICENSE</PackageLicenseUrl>
-        <RepositoryUrl>https://github.com/ShoneScript/ShoneDrawing</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/ShoneScript/Shone.Drawing</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/ShoneScript/Shone.Drawing/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/ShoneScript/Shone.Drawing</RepositoryUrl>
         <RepositoryType>git</RepositoryType>
         <AssemblyVersion>1.0.1</AssemblyVersion>
         <FileVersion>1.0.1</FileVersion>

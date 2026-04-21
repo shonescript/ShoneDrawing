@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Mimics System.Drawing.Drawing2D.InterpolationMode in a simplified manner,

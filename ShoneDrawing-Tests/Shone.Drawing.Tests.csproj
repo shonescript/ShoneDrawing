@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <RootNamespace>SkiaDrawing_Tests</RootNamespace>
+        <RootNamespace>Shone.Drawing.Tests</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
 
@@ -22,7 +22,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\ShoneDrawing\ShoneDrawing.csproj" />
+      <ProjectReference Include="..\Shone.Drawing\ShoneDrawing.csproj" />
     </ItemGroup>
 
     <ItemGroup>

@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 public class Bitmap : Image
 {

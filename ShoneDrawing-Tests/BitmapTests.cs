@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-namespace ShoneDrawing.Tests;
+namespace Shone.Drawing;
 
 public class BitmapTests
 {

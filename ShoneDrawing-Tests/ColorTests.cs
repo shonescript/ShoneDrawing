@@ -1,4 +1,4 @@
-﻿namespace ShoneDrawing.Tests;
+﻿namespace Shone.Drawing;
 
 public class ColorTests
 {

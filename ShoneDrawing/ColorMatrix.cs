@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Mimics the System.Drawing.Imaging.ColorMatrix (a 5x5 matrix for ARGB transformations).

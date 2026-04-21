@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A version of CopyPixelOperation that does not use the GDI (Windows raster op) values.

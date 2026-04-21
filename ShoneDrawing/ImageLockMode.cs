@@ -1,4 +1,4 @@
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// Specifies flags that control the behavior of locking a bitmap’s bits (similar to System.Drawing.Imaging.ImageLockMode).

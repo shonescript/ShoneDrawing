@@ -1,6 +1,6 @@
 //using System.Drawing;
 
-namespace ShoneDrawing.Tests;
+namespace Shone.Drawing;
 
 public class GraphicsTests
 {

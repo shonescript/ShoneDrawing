@@ -1,17 +1,17 @@
-# ShoneDrawing
+# Shone.Drawing
 
 This is an implementation of the methods of System.Drawing in SkiaSharp. It is a work in progress and is not yet complete. The goal is to provide a drop-in replacement for System.Drawing that uses SkiaSharp for rendering.
 
 
 ## Usage
 
-To use this library, you need to add a reference to the ShoneDrawing project in your project. Then, you can use the ShoneDrawing namespace in your code.
+To use this library, you need to add a reference to the Shone.Drawing project in your project. Then, you can use the Shone.Drawing namespace in your code.
 
 It is meant to be a drop-in replacement for System.Drawing, so you can use it in the same way. For example, you can create a new bitmap like this:
 
 ```csharp
 
-using ShoneDrawing;
+using Shone.Drawing;
 
 Bitmap bitmap = new Bitmap(100, 100);
 

@@ -1,7 +1,7 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Rendering;
 
-namespace ShoneDrawing;
+namespace Shone.Drawing;
 
 /// <summary>
 /// A simplified class that mimics System.Drawing.Font
