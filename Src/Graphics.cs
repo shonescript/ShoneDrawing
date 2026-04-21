@@ -1,9 +1,9 @@
 #if SystemDrawing
 using System.Drawing.Drawing2D;
-using System.Drawing.Imaging;
+using System.Drawing.Text;
 #else
 using Shone.Drawing.Drawing2D;
-using Shone.Drawing.Imaging;
+using Shone.Drawing.Text;
 #endif
 using Aprillz.MewUI.Rendering;
 
@@ -26,6 +26,13 @@ public class Graphics : IDisposable
         set => interpolationMode = value;
     }
 
+    public TextRenderingHint TextRenderingHint { get; set; }
+
+    public float PageScale { get; set; }
+
+    public GraphicsUnit PageUnit { get; set; }
+
+
     private Graphics(IGraphicsContext context)
     {
         graphicsContext = context;
@@ -34,7 +41,7 @@ public class Graphics : IDisposable
     public static Graphics FromImage(Bitmap bitmap)
     {
         var renderTarget = bitmap.ToRenderTarget();
-        
+
         var context = Factory.CreateContext(renderTarget);
         return new Graphics(context);
     }
@@ -89,7 +96,7 @@ public class Graphics : IDisposable
     public void DrawString(string text, float x, float y, Color color, float textSize = 16)
     {
         var bounds = new Aprillz.MewUI.Rect(x, y, float.MaxValue, textSize * 1.5f);
-        
+
         var font = Factory.CreateFont("Arial", textSize);
         graphicsContext.DrawText(text.AsSpan(), bounds, font, color.ToMewColor());
     }
@@ -107,16 +114,26 @@ public class Graphics : IDisposable
 
     #region MeasureString
 
-    /// <summary>
-    /// Measures the width and height of the given string using the specified Font.
-    /// Returns a SizeF representing the bounding box (in local drawing units).
-    /// </summary>
-    public SizeF MeasureString(string numerics, Font f)
+    public SizeF MeasureString(string? text, Font font) => MeasureString(text, font);
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font)
     {
-        var size = graphicsContext.MeasureText(numerics.AsSpan(), f.ToMewFont());
+        var size = graphicsContext.MeasureText(text, font.ToMewFont());
         return new SizeF((float)size.Width, (float)size.Height);
     }
 
+    public SizeF MeasureString(string? text, Font font, int maxWidth) => MeasureString(text, font, maxWidth);
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int maxWidth)
+    {
+        var size = graphicsContext.MeasureText(text, font.ToMewFont(), maxWidth);
+        return new SizeF((float)size.Width, (float)size.Height);
+    }
+
+    public SizeF MeasureString(string? text, Font font, int maxWidth, StringFormat? fmt) => MeasureString(text, font, maxWidth, fmt);
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int maxWidth, StringFormat? fmt)
+    {
+        // to do
+        return MeasureString(text, font, maxWidth);
+    }
     #endregion
 
     #region Transforms

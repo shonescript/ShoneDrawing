@@ -6,6 +6,7 @@ namespace System.Drawing;
 #else
 namespace Shone.Drawing;
 #endif
+
 /// <summary>
 /// A simplified class that mimics System.Drawing.Font
 /// using MewUI to store typeface and style information.
@@ -19,13 +20,19 @@ public class Font : IDisposable
     private FontStyle style;
     private string familyName;
 
+    public IFont IFont => mewFont;
+    public double Ascent => mewFont.Ascent;
+    public double Descent => mewFont.Descent;
+    public double InternalLeading => mewFont.InternalLeading;
+    public double CapHeight => mewFont.CapHeight;
+
     /// <summary>
     /// Initializes a new Font with the specified family name, size, and style.
     /// </summary>
     /// <param name="familyName">The font family name (e.g. "Arial").</param>
     /// <param name="emSize">The font size in points (or float units).</param>
     /// <param name="style">The font style (regular, bold, italic, etc.).</param>
-    public Font(string familyName, float emSize, FontStyle style = FontStyle.Regular)
+    public Font(string familyName, float emSize, FontStyle style = FontStyle.Regular, GraphicsUnit unit = GraphicsUnit.Pixel, byte gdiCharSet = 0, bool gdiVerticalFont = false)
     {
         this.familyName = familyName;
         this.size = emSize;
@@ -38,7 +45,7 @@ public class Font : IDisposable
         var isStrikethrough = (style & FontStyle.Strikeout) != 0;
 
         // Use graphics factory to create font
-        
+
         mewFont = Graphics.Factory.CreateFont(familyName, emSize, weight, isItalic, isUnderline, isStrikethrough);
     }
 

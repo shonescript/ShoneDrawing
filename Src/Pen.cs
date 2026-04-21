@@ -1,8 +1,10 @@
 using Aprillz.MewUI.Rendering;
 
 #if SystemDrawing
+using System.Drawing.Drawing2D;
 namespace System.Drawing;
 #else
+using Shone.Drawing.Drawing2D;
 namespace Shone.Drawing;
 #endif
 /// <summary>
@@ -12,12 +14,26 @@ public class Pen: IDisposable
 {
     public Color Color { get; set; }
     public float Width { get; set; }
+    public LineCap StartCap { get; set; }
+    public LineCap EndCap { get; set; }
+    public DashCap DashCap { get; set; }
+    public LineJoin LineJoin { get; set; }
+    public DashStyle DashStyle { get; set; }
+    public float DashOffset { get; set; }
+    public float[] DashPattern { get; set; }
+    public float[] CompoundArray { get; set; }
 
-    // You could add more properties: DashStyle, LineJoin, etc.
+    public float MiterLimit { get; set; }
 
     public Pen(Color color, float width = 1.0f)
     {
         Color = color;
+        Width = width;
+    }
+
+    public Pen(Brush brush, float width = 1.0f)
+    {
+        Color = brush.Color;
         Width = width;
     }
 
@@ -32,6 +48,5 @@ public class Pen: IDisposable
 
     public void Dispose()
     {
-        // No unmanaged resources to release.
     }
 }
