@@ -1,11 +1,10 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <RootNamespace>Shone.Drawing.Tests</RootNamespace>
+        <RootNamespace>Shone.Drawing</RootNamespace>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-
         <IsPackable>false</IsPackable>
         <IsTestProject>true</IsTestProject>
     </PropertyGroup>
@@ -22,7 +21,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Shone.Drawing\ShoneDrawing.csproj" />
+      <ProjectReference Include="..\Src\Shone.Drawing.csproj" />
     </ItemGroup>
 
     <ItemGroup>
@@ -34,6 +33,12 @@
       <Content Include="testImages\white.png">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </Content>
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="Aprillz.MewUI">
+        <HintPath>..\..\MewUI\src\MewUI\bin\Debug\net10.0\Aprillz.MewUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>

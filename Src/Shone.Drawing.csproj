@@ -2,7 +2,8 @@
 
     <PropertyGroup>
         <TargetFramework>net10.0</TargetFramework>
-        <ImplicitUsings>enable</ImplicitUsings>
+		<RootNamespace>Shone.Drawing</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
         <Nullable>disable</Nullable>
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Title>Shone.Drawing</Title>
@@ -19,7 +20,9 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\..\src\MewUI\MewUI.csproj" />
+      <Reference Include="Aprillz.MewUI">
+        <HintPath>..\..\MewUI\src\MewUI\bin\Debug\net10.0\Aprillz.MewUI.dll</HintPath>
+      </Reference>
     </ItemGroup>
 
 </Project>
