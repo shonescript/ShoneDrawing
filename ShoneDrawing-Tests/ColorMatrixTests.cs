@@ -2,7 +2,6 @@ namespace ShoneDrawing.Tests;
 
 using Xunit;
 using ShoneDrawing;
-using System;
 
 public class ColorMatrixTests
 {

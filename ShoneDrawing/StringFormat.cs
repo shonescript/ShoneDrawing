@@ -1,109 +1,106 @@
-using System;
-using Aprillz.MewUI;
 using Aprillz.MewUI.Rendering;
 
-namespace ShoneDrawing
+namespace ShoneDrawing;
+
+/// <summary>
+/// A class that mimics System.Drawing.StringFormat using MewUI for text layout and alignment.
+/// </summary>
+public class StringFormat : IDisposable
 {
+    private bool disposed;
+
     /// <summary>
-    /// A class that mimics System.Drawing.StringFormat using MewUI for text layout and alignment.
+    /// Specifies horizontal alignment (Near = left, Center, Far = right).
     /// </summary>
-    public class StringFormat : IDisposable
+    public StringAlignment Alignment { get; set; } = StringAlignment.Near;
+
+    /// <summary>
+    /// Specifies vertical alignment (Near = top, Center, Far = bottom).
+    /// </summary>
+    public StringAlignment LineAlignment { get; set; } = StringAlignment.Near;
+
+    /// <summary>
+    /// Specifies the trimming style used when text is too long.
+    /// </summary>
+    public StringTrimming Trimming { get; set; } = StringTrimming.None;
+
+    /// <summary>
+    /// Specifies whether the text is displayed right-to-left.
+    /// </summary>
+    public bool DirectionRightToLeft { get; set; } = false;
+
+    /// <summary>
+    /// Specifies additional format flags.
+    /// </summary>
+    public StringFormatFlags FormatFlags { get; set; } = 0;
+
+    /// <summary>
+    /// Creates a new default StringFormat.
+    /// </summary>
+    public StringFormat()
     {
-        private bool disposed;
+    }
 
-        /// <summary>
-        /// Specifies horizontal alignment (Near = left, Center, Far = right).
-        /// </summary>
-        public StringAlignment Alignment { get; set; } = StringAlignment.Near;
+    /// <summary>
+    /// Creates a new StringFormat using specific format flags.
+    /// </summary>
+    /// <param name="flags">The StringFormatFlags to apply.</param>
+    public StringFormat(StringFormatFlags flags)
+    {
+        FormatFlags = flags;
 
-        /// <summary>
-        /// Specifies vertical alignment (Near = top, Center, Far = bottom).
-        /// </summary>
-        public StringAlignment LineAlignment { get; set; } = StringAlignment.Near;
-
-        /// <summary>
-        /// Specifies the trimming style used when text is too long.
-        /// </summary>
-        public StringTrimming Trimming { get; set; } = StringTrimming.None;
-
-        /// <summary>
-        /// Specifies whether the text is displayed right-to-left.
-        /// </summary>
-        public bool DirectionRightToLeft { get; set; } = false;
-
-        /// <summary>
-        /// Specifies additional format flags.
-        /// </summary>
-        public StringFormatFlags FormatFlags { get; set; } = 0;
-
-        /// <summary>
-        /// Creates a new default StringFormat.
-        /// </summary>
-        public StringFormat()
+        // Apply right-to-left setting if specified in flags
+        if ((flags & StringFormatFlags.DirectionRightToLeft) != 0)
         {
+            DirectionRightToLeft = true;
         }
+    }
 
-        /// <summary>
-        /// Creates a new StringFormat using specific format flags.
-        /// </summary>
-        /// <param name="flags">The StringFormatFlags to apply.</param>
-        public StringFormat(StringFormatFlags flags)
+    /// <summary>
+    /// Creates a new StringFormat by copying another.
+    /// </summary>
+    public StringFormat(StringFormat other)
+    {
+        Alignment = other.Alignment;
+        LineAlignment = other.LineAlignment;
+        Trimming = other.Trimming;
+        DirectionRightToLeft = other.DirectionRightToLeft;
+        FormatFlags = other.FormatFlags;
+    }
+
+    /// <summary>
+    /// Predefined default format similar to System.Drawing.StringFormat.GenericDefault.
+    /// </summary>
+    public static StringFormat GenericDefault => new StringFormat();
+
+    /// <summary>
+    /// Predefined typographic format similar to System.Drawing.StringFormat.GenericTypographic.
+    /// </summary>
+    public static StringFormat GenericTypographic => new StringFormat
+    {
+        Trimming = StringTrimming.None
+    };
+
+    /// <summary>
+    /// Applies the string format settings to a MewUI text rendering context.
+    /// </summary>
+    public void ApplyTo(IFont font, ref Aprillz.MewUI.Rect textBounds)
+    {
+    }
+
+    /// <summary>
+    /// Cleans up resources.
+    /// </summary>
+    public void Dispose()
+    {
+        if (!disposed)
         {
-            FormatFlags = flags;
-
-            // Apply right-to-left setting if specified in flags
-            if ((flags & StringFormatFlags.DirectionRightToLeft) != 0)
-            {
-                DirectionRightToLeft = true;
-            }
+            disposed = true;
         }
+    }
 
-        /// <summary>
-        /// Creates a new StringFormat by copying another.
-        /// </summary>
-        public StringFormat(StringFormat other)
-        {
-            Alignment = other.Alignment;
-            LineAlignment = other.LineAlignment;
-            Trimming = other.Trimming;
-            DirectionRightToLeft = other.DirectionRightToLeft;
-            FormatFlags = other.FormatFlags;
-        }
-
-        /// <summary>
-        /// Predefined default format similar to System.Drawing.StringFormat.GenericDefault.
-        /// </summary>
-        public static StringFormat GenericDefault => new StringFormat();
-
-        /// <summary>
-        /// Predefined typographic format similar to System.Drawing.StringFormat.GenericTypographic.
-        /// </summary>
-        public static StringFormat GenericTypographic => new StringFormat
-        {
-            Trimming = StringTrimming.None
-        };
-
-        /// <summary>
-        /// Applies the string format settings to a MewUI text rendering context.
-        /// </summary>
-        public void ApplyTo(IFont font, ref Aprillz.MewUI.Rect textBounds)
-        {
-        }
-
-        /// <summary>
-        /// Cleans up resources.
-        /// </summary>
-        public void Dispose()
-        {
-            if (!disposed)
-            {
-                disposed = true;
-            }
-        }
-
-        public override string ToString()
-        {
-            return $"StringFormat [Alignment={Alignment}, LineAlignment={LineAlignment}, Trimming={Trimming}, DirectionRightToLeft={DirectionRightToLeft}, FormatFlags={FormatFlags}]";
-        }
+    public override string ToString()
+    {
+        return $"StringFormat [Alignment={Alignment}, LineAlignment={LineAlignment}, Trimming={Trimming}, DirectionRightToLeft={DirectionRightToLeft}, FormatFlags={FormatFlags}]";
     }
 }
