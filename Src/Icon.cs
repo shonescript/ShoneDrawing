@@ -1,6 +1,11 @@
+#if SystemDrawing
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+#else
+using Shone.Drawing.Drawing2D;
+using Shone.Drawing.Imaging;
+#endif
 using Aprillz.MewUI.Rendering;
-
-
 
 /// <summary>
 /// A simple Icon class that mimics some of the functionality of System.Drawing.Icon

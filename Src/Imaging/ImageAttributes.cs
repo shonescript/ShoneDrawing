@@ -1,4 +1,13 @@
-
+using Aprillz.MewUI.Rendering;
+#if SystemDrawing
+using System.Drawing;
+using System.Drawing.Drawing2D;
+namespace System.Drawing.Imaging;
+#else
+using Shone.Drawing;
+using Shone.Drawing.Drawing2D;
+namespace Shone.Drawing.Imaging;
+#endif
 
 /// <summary>
 /// Mimics System.Drawing.Imaging.ImageAttributes in a simplified manner,

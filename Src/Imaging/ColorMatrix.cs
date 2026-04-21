@@ -1,4 +1,8 @@
-
+#if SystemDrawing
+namespace System.Drawing.Imaging;
+#else
+namespace Shone.Drawing.Imaging;
+#endif
 
 /// <summary>
 /// Mimics the System.Drawing.Imaging.ColorMatrix (a 5x5 matrix for ARGB transformations).

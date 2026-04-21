@@ -1,6 +1,9 @@
+#if SystemDrawing
+namespace System.Drawing.Drawing2D;
+#else
+namespace Shone.Drawing.Drawing2D;
+#endif
 using Aprillz.MewUI.Rendering;
-
-
 
 /// <summary>
 /// A brush that paints an area with a linear gradient between two points,

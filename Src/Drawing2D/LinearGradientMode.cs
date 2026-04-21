@@ -1,4 +1,8 @@
-
+#if SystemDrawing
+namespace System.Drawing.Drawing2D;
+#else
+namespace Shone.Drawing.Drawing2D;
+#endif
 
 /// <summary>
 /// Mimics System.Drawing.Drawing2D.LinearGradientMode,

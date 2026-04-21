@@ -1,3 +1,6 @@
+using Shone.Drawing.Drawing2D;
+using Shone.Drawing.Imaging;
+
 namespace Shone.Drawing;
 
 using Xunit;

@@ -1,4 +1,8 @@
-
+#if SystemDrawing
+namespace System.Drawing.Imaging;
+#else
+namespace Shone.Drawing.Imaging;
+#endif
 
 public static class PixelFormatExtensions
 {

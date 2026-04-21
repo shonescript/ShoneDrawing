@@ -1,4 +1,8 @@
-
+#if SystemDrawing
+namespace System.Drawing.Imaging;
+#else
+namespace Shone.Drawing.Imaging;
+#endif
 
 /// <summary>
 /// Specifies flags that control the behavior of locking a bitmap’s bits (similar to System.Drawing.Imaging.ImageLockMode).

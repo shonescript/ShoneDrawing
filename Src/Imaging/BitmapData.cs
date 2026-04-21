@@ -1,4 +1,8 @@
-
+#if SystemDrawing
+namespace System.Drawing.Imaging;
+#else
+namespace Shone.Drawing.Imaging;
+#endif
 
 /// <summary>
 /// A simple class that mimics System.Drawing.Imaging.BitmapData for locked bitmap regions.

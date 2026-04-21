@@ -1,5 +1,7 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
+using Shone.Drawing.Drawing2D;
+using Shone.Drawing.Imaging;
 
 namespace Shone.Drawing;
 

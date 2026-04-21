@@ -1,6 +1,11 @@
+#if SystemDrawing
+using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
+#else
+using Shone.Drawing.Drawing2D;
+using Shone.Drawing.Imaging;
+#endif
 using Aprillz.MewUI.Rendering;
-
-
 
 /// <summary>
 /// A simplified class that mimics System.Drawing.Image using MewUI for pixel data.
