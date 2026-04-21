@@ -63,9 +63,6 @@ namespace ShoneDrawing
         /// </summary>
         public StringFormat(StringFormat other)
         {
-            if (other == null)
-                throw new ArgumentNullException(nameof(other));
-
             Alignment = other.Alignment;
             LineAlignment = other.LineAlignment;
             Trimming = other.Trimming;
@@ -91,11 +88,6 @@ namespace ShoneDrawing
         /// </summary>
         public void ApplyTo(IFont font, ref Aprillz.MewUI.Rect textBounds)
         {
-            if (font == null)
-                throw new ArgumentNullException(nameof(font));
-
-            // MewUI handles text alignment through the DrawText method parameters
-            // This method is kept for compatibility with existing code
         }
 
         /// <summary>

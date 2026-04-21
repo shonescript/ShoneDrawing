@@ -8,11 +8,6 @@ namespace ShoneDrawing
     {
         public static void RotateFlip(this Bitmap bmp, RotateFlipType rft)
         {
-            if (bmp == null)
-                throw new ArgumentNullException(nameof(bmp));
-
-            // Extract rotation (0..3) from the lower 2 bits
-            // and flip (0..3) from the upper bits
             int rotateIndex = (int)rft % 4;  // 0=none, 1=90, 2=180, 3=270
             int flipIndex = (int)rft / 4;    // 0=none, 1=flipX, 2=flipY, 3=flipXY
 

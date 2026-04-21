@@ -26,9 +26,6 @@ namespace ShoneDrawing
 
         public Bitmap(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-
             var bytes = File.ReadAllBytes(fileName);
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             image = graphicsFactory.CreateImageFromBytes(bytes);
@@ -37,9 +34,6 @@ namespace ShoneDrawing
 
         public Bitmap(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
             using var ms = new MemoryStream();
             stream.CopyTo(ms);
             var bytes = ms.ToArray();
@@ -50,9 +44,6 @@ namespace ShoneDrawing
 
         public Bitmap(Bitmap b, Size s)
         {
-            if (b == null)
-                throw new ArgumentNullException(nameof(b));
-
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             renderTarget = graphicsFactory.CreateBitmapRenderTarget(s.Width, s.Height);
             using (var context = graphicsFactory.CreateContext(renderTarget))
@@ -62,7 +53,6 @@ namespace ShoneDrawing
             }
             image = graphicsFactory.CreateImageFromPixelSource(renderTarget);
 
-            // Copy over resolution from original
             horizontalResolution = b.horizontalResolution;
             verticalResolution   = b.verticalResolution;
             
@@ -76,9 +66,6 @@ namespace ShoneDrawing
         /// </summary>
         public Bitmap(int width, int height, PixelFormat format)
         {
-            if (width <= 0 || height <= 0)
-                throw new ArgumentOutOfRangeException("Width and height must be positive.");
-
             // Example: handle only Format32bppArgb.
             // If you need more formats, add logic or throw for unsupported.
             if (format != PixelFormat.Format32bppArgb)
@@ -99,27 +86,15 @@ namespace ShoneDrawing
         /// </summary>
         public Bitmap(int width, int height, int stride, PixelFormat p, IntPtr scan0)
         {
-            if (width <= 0 || height <= 0)
-                throw new ArgumentOutOfRangeException("Width and height must be positive.");
-            if (scan0 == IntPtr.Zero)
-                throw new ArgumentNullException(nameof(scan0), "scan0 cannot be IntPtr.Zero.");
 
-            // TODO: Implement raw pixel data initialization for MewUI
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             renderTarget = graphicsFactory.CreateBitmapRenderTarget(width, height);
             image = graphicsFactory.CreateImageFromPixelSource(renderTarget);
             PixelFormat = p;
         }
 
-        /// <summary>
-        /// Creates a new Bitmap from an existing one, scaled to the specified width and height.
-        /// </summary>
         public Bitmap(Bitmap b, int width, int height)
         {
-            if (b == null)
-                throw new ArgumentNullException(nameof(b));
-            if (width <= 0 || height <= 0)
-                throw new ArgumentOutOfRangeException("Width and height must be positive.");
 
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             renderTarget = graphicsFactory.CreateBitmapRenderTarget(width, height);
@@ -130,7 +105,6 @@ namespace ShoneDrawing
             }
             image = graphicsFactory.CreateImageFromPixelSource(renderTarget);
 
-            // Copy resolution from original
             horizontalResolution = b.horizontalResolution;
             verticalResolution   = b.verticalResolution;
             
@@ -145,8 +119,6 @@ namespace ShoneDrawing
         {
             get
             {
-                if (image == null)
-                    throw new ObjectDisposedException(nameof(Bitmap));
                 return image.PixelWidth;
             }
         }
@@ -155,8 +127,6 @@ namespace ShoneDrawing
         {
             get
             {
-                if (image == null)
-                    throw new ObjectDisposedException(nameof(Bitmap));
                 return image.PixelHeight;
             }
         }
@@ -177,8 +147,6 @@ namespace ShoneDrawing
         {
             get
             {
-                if (image == null)
-                    throw new ObjectDisposedException(nameof(Bitmap));
                 // TODO: Implement Scan0 for MewUI
                 throw new NotImplementedException("Scan0 is not implemented for MewUI Bitmap");
             }
@@ -188,8 +156,6 @@ namespace ShoneDrawing
         {
             get
             {
-                if (image == null)
-                    throw new ObjectDisposedException(nameof(Bitmap));
                 // TODO: Implement Stride for MewUI
                 return Width * 4; // Assuming 32bpp
             }
@@ -201,10 +167,6 @@ namespace ShoneDrawing
 
         public Color GetPixel(int x, int y)
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
-            if (x < 0 || x >= Width || y < 0 || y >= Height)
-                throw new ArgumentOutOfRangeException();
 
             // TODO: Implement GetPixel for MewUI
             return Color.Black;
@@ -212,10 +174,6 @@ namespace ShoneDrawing
 
         public void SetPixel(int x, int y, Color color)
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
-            if (x < 0 || x >= Width || y < 0 || y >= Height)
-                throw new ArgumentOutOfRangeException();
 
             // TODO: Implement SetPixel for MewUI
         }
@@ -229,9 +187,6 @@ namespace ShoneDrawing
         /// </summary>
         public Bitmap Clone()
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
-
             var newBitmap = new Bitmap(Width, Height);
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             using (var context = graphicsFactory.CreateContext(newBitmap.renderTarget))
@@ -250,15 +205,6 @@ namespace ShoneDrawing
         /// </summary>
         public Bitmap Clone(Rectangle r, PixelFormat f)
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
-
-            if (r.X < 0 || r.Y < 0 || r.Width < 0 || r.Height < 0 ||
-                r.X + r.Width > Width || r.Y + r.Height > Height)
-            {
-                throw new ArgumentException("The specified rectangle is out of bounds.");
-            }
-
             var newBitmap = new Bitmap(r.Width, r.Height, f);
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             using (var context = graphicsFactory.CreateContext(newBitmap.renderTarget))
@@ -279,24 +225,12 @@ namespace ShoneDrawing
 
         public BitmapData LockBits(Rectangle r, ImageLockMode m, PixelFormat f)
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
-
-            if (r.X < 0 || r.Y < 0 || r.Width < 0 || r.Height < 0 ||
-                r.X + r.Width > Width || r.Y + r.Height > Height)
-            {
-                throw new ArgumentException("The specified rectangle is out of the bitmap bounds.");
-            }
-
             // TODO: Implement LockBits for MewUI
             throw new NotImplementedException("LockBits is not implemented for MewUI Bitmap");
         }
 
         public void UnlockBits(BitmapData bmData)
         {
-            if (bmData == null)
-                throw new ArgumentNullException(nameof(bmData));
-            // No copy-back in this simplified approach
         }
 
         #endregion
@@ -305,36 +239,21 @@ namespace ShoneDrawing
 
         public void Save(string fileName, ImageFormat format, int quality = 100)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-
-            // TODO: Implement Save for MewUI
             throw new NotImplementedException("Save is not implemented for MewUI Bitmap");
         }
         
         public void Save(string fileName)
         {
-            if (string.IsNullOrEmpty(fileName))
-                throw new ArgumentNullException(nameof(fileName));
-
             Save(fileName, ImageFormat.Png);
         }
 
         public void Save(Stream stream, ImageFormat format, int quality = 100)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            // TODO: Implement Save for MewUI
             throw new NotImplementedException("Save is not implemented for MewUI Bitmap");
         }
 
         public void Save(MemoryStream s, ImageFormat f)
         {
-            if (s == null)
-                throw new ArgumentNullException(nameof(s));
-
-            // TODO: Implement Save for MewUI
             throw new NotImplementedException("Save is not implemented for MewUI Bitmap");
         }
 
@@ -344,15 +263,11 @@ namespace ShoneDrawing
 
         public IImage ToMewImage()
         {
-            if (image == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
             return image;
         }
 
         public IRenderTarget ToRenderTarget()
         {
-            if (renderTarget == null)
-                throw new ObjectDisposedException(nameof(Bitmap));
             return renderTarget;
         }
 
@@ -362,8 +277,6 @@ namespace ShoneDrawing
 
         public void SetResolution(float horizontal, float vertical)
         {
-            if (horizontal <= 0 || vertical <= 0)
-                throw new ArgumentOutOfRangeException("Resolution must be positive.");
             horizontalResolution = horizontal;
             verticalResolution   = vertical;
         }

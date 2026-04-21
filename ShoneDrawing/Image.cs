@@ -32,8 +32,6 @@ namespace ShoneDrawing
         /// </summary>
         public Image(IImage image)
         {
-            if (image == null)
-                throw new ArgumentNullException(nameof(image));
             mewImage = image;
         }
 
@@ -43,9 +41,6 @@ namespace ShoneDrawing
 
         public static Image FromFile(string filename)
         {
-            if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException(nameof(filename));
-
             var bytes = File.ReadAllBytes(filename);
             var graphicsFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
             IImage img = graphicsFactory.CreateImageFromBytes(bytes);
@@ -53,15 +48,11 @@ namespace ShoneDrawing
                 throw new Exception($"Failed to decode image from file: {filename}");
             Image result = new Image(img);
 
-            // Could parse metadata for DPI here
             return result;
         }
 
         public static Image FromStream(Stream stream)
         {
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
             using var ms = new MemoryStream();
             stream.CopyTo(ms);
             var bytes = ms.ToArray();
@@ -71,7 +62,6 @@ namespace ShoneDrawing
                 throw new Exception("Failed to decode image from stream.");
             Image result = new Image(img);
 
-            // Could parse metadata for DPI here
             return result;
         }
 
@@ -83,7 +73,6 @@ namespace ShoneDrawing
         {
             get
             {
-                CheckDisposed();
                 return mewImage?.PixelWidth ?? 0;
             }
         }
@@ -92,7 +81,6 @@ namespace ShoneDrawing
         {
             get
             {
-                CheckDisposed();
                 return mewImage?.PixelHeight ?? 0;
             }
         }
@@ -115,21 +103,11 @@ namespace ShoneDrawing
 
         public virtual void Save(string filename, ImageFormat format, int quality = 100)
         {
-            CheckDisposed();
-            if (string.IsNullOrEmpty(filename))
-                throw new ArgumentNullException(nameof(filename));
-
-            // TODO: Implement Save for MewUI
             throw new NotImplementedException("Save is not implemented for MewUI Image");
         }
 
         public virtual void Save(Stream stream, ImageFormat format, int quality = 100)
         {
-            CheckDisposed();
-            if (stream == null)
-                throw new ArgumentNullException(nameof(stream));
-
-            // TODO: Implement Save for MewUI
             throw new NotImplementedException("Save is not implemented for MewUI Image");
         }
 
@@ -184,19 +162,12 @@ namespace ShoneDrawing
             }
         }
 
-        protected void CheckDisposed()
-        {
-            if (disposed)
-                throw new ObjectDisposedException(nameof(Image));
-        }
-
         #endregion
 
         #region Utilities
 
         public virtual IImage ToMewImage()
         {
-            CheckDisposed();
             return mewImage;
         }
 

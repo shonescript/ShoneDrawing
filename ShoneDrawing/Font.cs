@@ -25,11 +25,6 @@ namespace ShoneDrawing
         /// <param name="style">The font style (regular, bold, italic, etc.).</param>
         public Font(string familyName, float emSize, FontStyle style = FontStyle.Regular)
         {
-            if (string.IsNullOrEmpty(familyName))
-                throw new ArgumentNullException(nameof(familyName));
-            if (emSize <= 0)
-                throw new ArgumentOutOfRangeException(nameof(emSize), "Font size must be positive.");
-
             this.familyName = familyName;
             this.size = emSize;
             this.style = style;
@@ -52,7 +47,6 @@ namespace ShoneDrawing
         {
             get
             {
-                CheckDisposed();
                 return familyName;
             }
         }
@@ -64,7 +58,6 @@ namespace ShoneDrawing
         {
             get
             {
-                CheckDisposed();
                 return size;
             }
         }
@@ -76,7 +69,6 @@ namespace ShoneDrawing
         {
             get
             {
-                CheckDisposed();
                 return style;
             }
         }
@@ -110,7 +102,6 @@ namespace ShoneDrawing
         /// </summary>
         public IFont ToMewFont()
         {
-            CheckDisposed();
             return mewFont;
         }
 
@@ -126,12 +117,6 @@ namespace ShoneDrawing
                 mewFont?.Dispose();
                 mewFont = null;
             }
-        }
-
-        private void CheckDisposed()
-        {
-            if (disposed)
-                throw new ObjectDisposedException(nameof(Font));
         }
 
         #endregion

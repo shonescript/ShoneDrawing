@@ -32,8 +32,6 @@ namespace ShoneDrawing
         /// </summary>
         public void SetColorMatrix(ColorMatrix matrix)
         {
-            if (matrix == null)
-                throw new ArgumentNullException(nameof(matrix));
             colorMatrix = matrix;
             hasColorMatrix = true;
         }

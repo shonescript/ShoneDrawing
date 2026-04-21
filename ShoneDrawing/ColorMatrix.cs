@@ -26,11 +26,6 @@ namespace ShoneDrawing
         /// </summary>
         public ColorMatrix(float[,] values)
         {
-            if (values == null)
-                throw new ArgumentNullException(nameof(values));
-            if (values.GetLength(0) < 5 || values.GetLength(1) < 5)
-                throw new ArgumentException("The values array must be at least 5x5.", nameof(values));
-
             for (int r = 0; r < 5; r++)
             {
                 for (int c = 0; c < 5; c++)
@@ -50,14 +45,10 @@ namespace ShoneDrawing
         {
             get
             {
-                if (row < 0 || row >= 5 || column < 0 || column >= 5)
-                    throw new ArgumentOutOfRangeException("Indexes must be in [0..4].");
                 return matrix[row, column];
             }
             set
             {
-                if (row < 0 || row >= 5 || column < 0 || column >= 5)
-                    throw new ArgumentOutOfRangeException("Indexes must be in [0..4].");
                 matrix[row, column] = value;
             }
         }
