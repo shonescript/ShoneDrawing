@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A float-based rectangle structure,

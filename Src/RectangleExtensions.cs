@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 public static class RectangleExtensions
 {

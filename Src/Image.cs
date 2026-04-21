@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A simplified class that mimics System.Drawing.Image using MewUI for pixel data.

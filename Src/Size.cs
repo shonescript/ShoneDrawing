@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// Represents the size of a rectangular region.

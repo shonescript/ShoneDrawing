@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace Shone.Drawing;
+
 
 public class Graphics : IDisposable
 {

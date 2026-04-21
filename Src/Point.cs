@@ -1,5 +1,5 @@
 
-namespace Shone.Drawing;
+
 
 public struct Point
 {

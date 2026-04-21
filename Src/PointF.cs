@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A structure that represents an x- and y-coordinate pair in floating-point.

@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// Specifies the unit of measure used for drawing operations.

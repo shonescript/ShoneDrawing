@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// Mimics System.Drawing.Drawing2D.LinearGradientMode,

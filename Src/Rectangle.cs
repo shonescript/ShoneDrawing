@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// Represents an integer-based rectangle, similar to System.Drawing.Rectangle, 

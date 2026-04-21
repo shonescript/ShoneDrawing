@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A minimal stand-in for System.Drawing.Pen, used for drawing lines, rectangles, etc.

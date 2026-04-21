@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// Specifies how text is trimmed when it exceeds the layout rectangle,

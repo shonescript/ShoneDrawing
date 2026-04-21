@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A class that mimics System.Drawing.StringFormat using MewUI for text layout and alignment.

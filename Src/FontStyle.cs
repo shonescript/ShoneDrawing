@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A simple enum to mimic System.Drawing.FontStyle,

@@ -1,6 +1,6 @@
 using Aprillz.MewUI.Rendering;
 
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A simple Icon class that mimics some of the functionality of System.Drawing.Icon

@@ -1,4 +1,4 @@
-namespace Shone.Drawing;
+
 
 /// <summary>
 /// A color struct that mimics System.Drawing.Color, backed by MewUI Color.
