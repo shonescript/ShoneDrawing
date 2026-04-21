@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Specifies the unit of measure used for drawing operations.
 /// Mirrors the System.Drawing.GraphicsUnit enum.

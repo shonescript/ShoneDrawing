@@ -7,6 +7,11 @@ using Shone.Drawing.Imaging;
 #endif
 using Aprillz.MewUI.Rendering;
 
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 public class Bitmap : Image
 {
     private IImage image;

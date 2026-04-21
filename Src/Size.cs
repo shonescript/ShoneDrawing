@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Represents the size of a rectangular region.
 /// This struct mimics the functionality of System.Drawing.Size.

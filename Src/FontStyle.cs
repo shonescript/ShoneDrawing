@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A simple enum to mimic System.Drawing.FontStyle,
 /// allowing flags like Bold, Italic, Underline, Strikeout.

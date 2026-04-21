@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A structure that represents an x- and y-coordinate pair in floating-point.
 /// Mimics System.Drawing.PointF but uses MewUI interop methods.

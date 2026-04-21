@@ -1,6 +1,8 @@
-
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 public struct Point
 {
     public int X;

@@ -1,7 +1,10 @@
 using Aprillz.MewUI.Rendering;
 
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A minimal stand-in for System.Drawing.Pen, used for drawing lines, rectangles, etc.
 /// </summary>

@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Specifies how an image is rotated and flipped.
 /// Mimics System.Drawing.RotateFlipType.

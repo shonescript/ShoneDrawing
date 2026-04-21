@@ -3,7 +3,6 @@ namespace System.Drawing.Drawing2D;
 #else
 namespace Shone.Drawing.Drawing2D;
 #endif
-
 /// <summary>
 /// Specifies how textures or images are tiled or clamped 
 /// when they are smaller or larger than the destination area.

@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Specifies text layout information and display options,
 /// mimicking System.Drawing.StringFormatFlags.

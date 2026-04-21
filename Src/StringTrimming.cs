@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Specifies how text is trimmed when it exceeds the layout rectangle,
 /// mimicking System.Drawing.StringTrimming.

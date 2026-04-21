@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A color struct that mimics System.Drawing.Color, backed by MewUI Color.
 /// Includes static named colors, ARGB creation, and a method to convert to MewUI Color.

@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A version of CopyPixelOperation that does not use the GDI (Windows raster op) values.
 /// Instead, each enum member has a simple integer code. 

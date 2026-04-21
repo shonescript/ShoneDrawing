@@ -1,0 +1,36 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>System.Drawing</RootNamespace>
+		<ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>disable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <Title>Shone.System.Drawing</Title>
+        <Description>This library is meant to be a drop-in replacement for System.Drawing witch is not multi plaftform since version 6. It uses MewUI as it's engine and re-implement the classes of System.Drawing.</Description>
+        <Copyright>2026, Shone</Copyright>
+        <PackageProjectUrl>https://github.com/ShoneScript/Shone.Drawing</PackageProjectUrl>
+        <PackageLicenseUrl>https://github.com/ShoneScript/Shone.Drawing/blob/main/LICENSE</PackageLicenseUrl>
+        <RepositoryUrl>https://github.com/ShoneScript/Shone.Drawing</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
+        <AssemblyVersion>1.0.1</AssemblyVersion>
+        <FileVersion>1.0.1</FileVersion>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <Version>1.0.1</Version>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>$(DefineConstants);SystemDrawing</DefineConstants>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+      <DefineConstants>$(DefineConstants);SystemDrawing</DefineConstants>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="Aprillz.MewUI">
+        <HintPath>..\..\MewUI\src\MewUI\bin\Debug\net10.0\Aprillz.MewUI.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

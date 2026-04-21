@@ -1,8 +1,11 @@
 using Aprillz.MewUI;
 using Aprillz.MewUI.Rendering;
 
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A simplified class that mimics System.Drawing.Font
 /// using MewUI to store typeface and style information.

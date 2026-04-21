@@ -1,7 +1,10 @@
 using Aprillz.MewUI.Rendering;
 
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A brush that paints an area with a solid color,
 /// mimicking System.Drawing.SolidBrush using MewUI.
@@ -47,15 +50,6 @@ public sealed class SolidBrush : Brush, IDisposable
             // If you had more resources, free them here.
             disposed = true;
         }
-    }
-
-    /// <summary>
-    /// Checks if this SolidBrush is disposed.
-    /// </summary>
-    private void CheckDisposed()
-    {
-        if (disposed)
-            throw new ObjectDisposedException(nameof(SolidBrush));
     }
 
     /// <summary>

@@ -1,7 +1,10 @@
 using Aprillz.MewUI.Rendering;
 
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A class that mimics System.Drawing.StringFormat using MewUI for text layout and alignment.
 /// </summary>

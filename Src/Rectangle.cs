@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Represents an integer-based rectangle, similar to System.Drawing.Rectangle, 
 /// but augmented with conversion helpers for MewUI Rect.

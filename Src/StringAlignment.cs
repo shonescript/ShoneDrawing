@@ -1,5 +1,8 @@
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// Defines text alignment in a layout box, mimicking System.Drawing.StringAlignment.
 /// </summary>

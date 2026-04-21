@@ -7,6 +7,11 @@ using Shone.Drawing.Imaging;
 #endif
 using Aprillz.MewUI.Rendering;
 
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A simplified class that mimics System.Drawing.Image using MewUI for pixel data.
 /// </summary>

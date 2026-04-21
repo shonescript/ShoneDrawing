@@ -1,7 +1,10 @@
 using Aprillz.MewUI.Rendering;
 
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 public static class BitmapExtensions
 {
     public static void RotateFlip(this Bitmap bmp, RotateFlipType rft)

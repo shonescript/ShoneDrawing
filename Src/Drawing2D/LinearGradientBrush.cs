@@ -82,8 +82,6 @@ public sealed class LinearGradientBrush : Brush, IDisposable
     /// </summary>
     public IBrush ToMewBrush()
     {
-        CheckDisposed();
-
         var start = new Aprillz.MewUI.Point((double)startPoint.X, (double)startPoint.Y);
         var end = new Aprillz.MewUI.Point((double)endPoint.X, (double)endPoint.Y);
 
@@ -107,13 +105,6 @@ public sealed class LinearGradientBrush : Brush, IDisposable
             disposed = true;
         }
     }
-
-    private void CheckDisposed()
-    {
-        if (disposed)
-            throw new ObjectDisposedException(nameof(LinearGradientBrush));
-    }
-
     #endregion
 
     public override string ToString()

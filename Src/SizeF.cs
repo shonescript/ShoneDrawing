@@ -1,6 +1,8 @@
-
-
-
+#if SystemDrawing
+namespace System.Drawing;
+#else
+namespace Shone.Drawing;
+#endif
 /// <summary>
 /// A structure to represent width/height in floating point, 
 /// mimicking System.Drawing.SizeF.
