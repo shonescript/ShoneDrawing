@@ -7,12 +7,10 @@ This is an implementation of the methods of System.Drawing in MewUI. It is a wor
 - Performance: should boost by 10~100 times when using Direct2D backend on windows platform.
 - Crossplatform: support all X11, OpenGL etc. backends by MewUI.
 - Compatability: implements a commonly used subset of interfaces of System.Drawing.Common.
-- publish: one code base, two dlls for different namespace using.<br>
-  （1）Shone.System.Drawing.dll<br>
-  keep System.Drawing namespace in direct replacement for System.Drawing.Common.dll. No codes need changed, but may conflict with other dlls such as winforms.<br>
-  （2）Shone.Drawing.dll<br>
-  use different Shone.Drawing namespace. Need some namespace relected codes changed.
-  
+- publish: one code base, two dlls for different namespace using.
+ - Shone.System.Drawing.dll: keep System.Drawing namespace in direct replacement for System.Drawing.Common.dll. No codes need changed, but may conflict with other dlls such as winforms.
+ - Shone.Drawing.dll: use different Shone.Drawing namespace. Need some namespace relected codes changed.
+ - 
 ## Usage
 
 To use this library, you need to add a reference to the ShoneDrawing and MewUI projects in your project. Then, you can use the ShoneDrawing or System.Drawing (in direct portable use case) namespace in your code.
