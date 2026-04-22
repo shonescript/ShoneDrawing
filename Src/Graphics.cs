@@ -17,6 +17,13 @@ public class Graphics : IDisposable
     public static IGraphicsFactory Factory;
     private IGraphicsContext graphicsContext;
     private bool disposed;
+    private Matrix matrix = new Matrix();
+
+    public Matrix Transform
+    {
+        get => matrix;
+        set => matrix = value;
+    }
 
     // Example InterpolationMode property and other members...
     private InterpolationMode interpolationMode = InterpolationMode.Default;
