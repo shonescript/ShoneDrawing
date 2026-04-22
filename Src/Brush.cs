@@ -8,7 +8,7 @@ namespace Shone.Drawing;
 /// <summary>
 /// A minimal stand-in for System.Drawing.Brush, used for filling shapes.
 /// </summary>
-public class Brush
+public class Brush : IDisposable
 {
     public Color Color { get; set; }
 
@@ -29,5 +29,9 @@ public class Brush
     {
         
         return Graphics.Factory.CreateSolidColorBrush(Color.ToMewColor());
+    }
+
+    public void Dispose()
+    {
     }
 }

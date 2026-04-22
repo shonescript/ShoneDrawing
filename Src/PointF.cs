@@ -71,6 +71,10 @@ public struct PointF : IEquatable<PointF>
         return new Vector2(x, y);
     }
 
+    public float AngleTo(PointF q)
+    {
+        return (float)(Math.Atan2(q.Y - Y, q.X - X) * 180 / Math.PI);
+    }
 
     public static implicit operator PointF(Vector2 v) => new PointF(v.X, v.Y);
 

@@ -45,6 +45,31 @@ public class GraphicsPath : IDisposable, ICloneable
 
     public int PointCount => points.Count;
 
+    public PointF[] PathPoints
+    {
+        get
+        {
+            var result = new List<PointF>(points.Count);
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                byte type = (byte)(types[i] & 0x07);
+
+                if (type == 3)
+                {
+                    // Bezier 控制点 / 曲线点本身都直接返回
+                    result.Add(points[i]);
+                }
+                else
+                {
+                    result.Add(points[i]);
+                }
+            }
+
+            return result.ToArray();
+        }
+    }
+
     public GraphicsPath()
         : this(FillMode.Alternate)
     {

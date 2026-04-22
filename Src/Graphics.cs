@@ -6,6 +6,7 @@ using Shone.Drawing.Drawing2D;
 using Shone.Drawing.Text;
 #endif
 using Aprillz.MewUI.Rendering;
+using Aprillz.MewUI;
 
 #if SystemDrawing
 namespace System.Drawing;
@@ -14,7 +15,7 @@ namespace Shone.Drawing;
 #endif
 public class Graphics : IDisposable
 {
-    public static IGraphicsFactory Factory;
+    public static IGraphicsFactory Factory = Application.DefaultGraphicsFactory;
     private IGraphicsContext graphicsContext;
     private bool disposed;
     private Matrix matrix = new Matrix();
@@ -166,7 +167,7 @@ public class Graphics : IDisposable
                 // 获取路径的边界矩形
                 var bounds = path.GetBounds();
                 var rect = new Aprillz.MewUI.Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-                
+
                 // 填充边界矩形
                 graphicsContext.FillRectangle(rect, brush.ToMewBrush());
             }
