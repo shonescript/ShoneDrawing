@@ -7,7 +7,6 @@ using Shone.Drawing.Text;
 #endif
 using Aprillz.MewUI.Rendering;
 using Aprillz.MewUI;
-using static System.Net.Mime.MediaTypeNames;
 
 #if SystemDrawing
 namespace System.Drawing;
