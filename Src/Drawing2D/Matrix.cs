@@ -13,6 +13,7 @@ public enum MatrixOrder
     Append
 }
 
+
 public class Matrix : IDisposable
 {
     Matrix3x2 matrix;
@@ -25,7 +26,7 @@ public class Matrix : IDisposable
     {
         get
         {
-            // to do
+            return Matrix3x2.Invert(matrix, out _);
         }
     }
 
@@ -42,7 +43,7 @@ public class Matrix : IDisposable
 
     public Matrix(float m11, float m12, float m21, float m22, float dx, float dy)
     {
-        // to do
+        matrix = new Matrix3x2(m11, m12, m21, m22, dx, dy);
     }
 
     public void Dispose()
@@ -65,7 +66,10 @@ public class Matrix : IDisposable
 
     public void Invert()
     {
-        // to do
+        if (!Matrix3x2.Invert(matrix, out var inverted))
+            throw new InvalidOperationException("The matrix is not invertible.");
+
+        matrix = inverted;
     }
 
     public void Translate(float offsetX, float offsetY)
@@ -75,7 +79,10 @@ public class Matrix : IDisposable
 
     public void Translate(float offsetX, float offsetY, MatrixOrder order)
     {
-        // to do
+        var t = Matrix3x2.CreateTranslation(offsetX, offsetY);
+        matrix = order == MatrixOrder.Prepend
+            ? t * matrix
+            : matrix * t;
     }
 
     public void Scale(float scaleX, float scaleY)
@@ -85,7 +92,10 @@ public class Matrix : IDisposable
 
     public void Scale(float scaleX, float scaleY, MatrixOrder order)
     {
-        // to do
+        var s = Matrix3x2.CreateScale(scaleX, scaleY);
+        matrix = order == MatrixOrder.Prepend
+            ? s * matrix
+            : matrix * s;
     }
 
     public void Shear(float shearX, float shearY)
@@ -95,7 +105,14 @@ public class Matrix : IDisposable
 
     public void Shear(float shearX, float shearY, MatrixOrder order)
     {
-        // to do
+        var s = new Matrix3x2(
+            1f, shearY,
+            shearX, 1f,
+            0f, 0f);
+
+        matrix = order == MatrixOrder.Prepend
+            ? s * matrix
+            : matrix * s;
     }
 
     public void RotateAt(float angle, PointF point)
@@ -105,34 +122,59 @@ public class Matrix : IDisposable
 
     public void RotateAt(float angle, PointF point, MatrixOrder order)
     {
-        // to do
+        var toOrigin = Matrix3x2.CreateTranslation(-point.X, -point.Y);
+        var rotate = Matrix3x2.CreateRotation(angle * (MathF.PI / 180f));
+        var back = Matrix3x2.CreateTranslation(point.X, point.Y);
+
+        var r = toOrigin * rotate * back;
+
+        matrix = order == MatrixOrder.Prepend
+            ? r * matrix
+            : matrix * r;
     }
 
     public void TransformPoints(PointF[] pts)
     {
         TransformPoints(pts.AsSpan());
     }
-    public void TransformPoints(params ReadOnlySpan<PointF> pts)
+
+    public void TransformPoints(params Span<PointF> pts)
     {
-        // to do
+        for (int i = 0; i < pts.Length; i++)
+        {
+            var p = pts[i];
+            pts[i] = Vector2.Transform(p.Vector2, matrix);
+        }
     }
 
     public void TransformPoints(Point[] pts)
     {
         TransformPoints(pts.AsSpan());
     }
-    public void TransformPoints(params ReadOnlySpan<Point> pts)
+
+    public void TransformPoints(params Span<Point> pts)
     {
-        // to do
+        for (int i = 0; i < pts.Length; i++)
+        {
+            var p = pts[i];
+            var x = p.X * matrix.M11 + p.Y * matrix.M21 + matrix.M31;
+            var y = p.X * matrix.M12 + p.Y * matrix.M22 + matrix.M32;
+            pts[i] = new Point((int)MathF.Round(x), (int)MathF.Round(y));
+        }
     }
 
     public void TransformVectors(PointF[] pts)
     {
         TransformVectors(pts.AsSpan());
     }
-    public void TransformVectors(params ReadOnlySpan<PointF> pts)
+
+    public void TransformVectors(params Span<PointF> pts)
     {
-        // to do
+        for (int i = 0; i < pts.Length; i++)
+        {
+            var p = pts[i];
+            pts[i] = Vector2.TransformNormal(p.Vector2, matrix);
+        }
     }
 
     public void Multiply(Matrix matrix)
@@ -142,7 +184,9 @@ public class Matrix : IDisposable
 
     public void Multiply(Matrix matrix, MatrixOrder order)
     {
-        // to do
+        this.matrix = order == MatrixOrder.Prepend
+            ? matrix.matrix * this.matrix
+            : this.matrix * matrix.matrix;
     }
 
     public void Rotate(float angle)
@@ -157,6 +201,6 @@ public class Matrix : IDisposable
 
     public void Reset()
     {
-        // to do
+        matrix = Matrix3x2.Identity;
     }
 }

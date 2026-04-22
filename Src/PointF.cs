@@ -1,6 +1,8 @@
 #if SystemDrawing
 namespace System.Drawing;
 #else
+using System.Numerics;
+
 namespace Shone.Drawing;
 #endif
 /// <summary>
@@ -18,6 +20,8 @@ public struct PointF : IEquatable<PointF>
     /// The y-coordinate of this PointF.
     /// </summary>
     public float Y;
+
+    public Vector2 Vector2 => new Vector2(X, Y);
 
     /// <summary>
     /// Initializes a new instance of the PointF struct with the specified coordinates.
@@ -104,6 +108,7 @@ public struct PointF : IEquatable<PointF>
     #endregion
 
     #region Operators for Arithmetic (Optional)
+    public static implicit operator PointF(Vector2 v) => new PointF(v.X, v.Y);
 
     // You can optionally define operator +, -, etc.
     // Example:
