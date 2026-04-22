@@ -26,6 +26,11 @@ public class Graphics : IDisposable
         set => interpolationMode = value;
     }
 
+    public SmoothingMode SmoothingMode { get; set; }
+    public PixelOffsetMode PixelOffsetMode { get; set; }
+    public CompositingMode CompositingMode { get; set; }
+    public CompositingQuality CompositingQuality { get; set; }
+
     public TextRenderingHint TextRenderingHint { get; set; }
 
     public float PageScale { get; set; }

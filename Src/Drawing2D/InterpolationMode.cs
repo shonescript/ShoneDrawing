@@ -50,3 +50,39 @@ public enum InterpolationMode
     /// </summary>
     HighQualityBicubic
 }
+
+public enum CompositingMode
+{
+    SourceOver,
+    SourceCopy
+}
+
+public enum CompositingQuality
+{
+    Invalid = -1,
+    Default,
+    HighSpeed,
+    HighQuality,
+    GammaCorrected,
+    AssumeLinear
+}
+
+public enum PixelOffsetMode
+{
+    Invalid = -1,
+    Default,
+    HighSpeed,
+    HighQuality,
+    None,
+    Half
+}
+
+public enum SmoothingMode
+{
+    Invalid = -1,
+    Default,
+    HighSpeed,
+    HighQuality,
+    None,
+    AntiAlias
+}
