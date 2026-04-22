@@ -90,18 +90,14 @@ public class Bitmap : Image
     /// The raw data is copied into this bitmap’s internal buffer.
     /// </summary>
     public Bitmap(int width, int height, int stride, PixelFormat p, IntPtr scan0)
-    {
-
-        
+    {        
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
         image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
         PixelFormat = p;
     }
 
     public Bitmap(Bitmap b, int width, int height)
-    {
-
-        
+    {        
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
         using (var context = Graphics.Factory.CreateContext(renderTarget))
         {
@@ -172,14 +168,12 @@ public class Bitmap : Image
 
     public Color GetPixel(int x, int y)
     {
-
         // TODO: Implement GetPixel for MewUI
         return Color.Black;
     }
 
     public void SetPixel(int x, int y, Color color)
     {
-
         // TODO: Implement SetPixel for MewUI
     }
 
