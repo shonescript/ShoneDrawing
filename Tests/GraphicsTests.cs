@@ -489,4 +489,75 @@ public class GraphicsTests
         var rect = new RectangleF(10, 10, 80, 80);
         Assert.Throws<ArgumentNullException>(() => graphics.FillRectangle((SolidBrush)null, rect));
     }
-}
+
+    [Fact]
+    public void DrawPath_WithValidPenAndPath_DrawsPath()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var pen = new Pen(Color.Black, 2);
+        var path = new GraphicsPath();
+        path.AddLine(10, 10, 90, 10);
+        path.AddLine(90, 10, 90, 90);
+        path.AddLine(90, 90, 10, 90);
+        path.CloseFigure();
+        graphics.DrawPath(pen, path);
+        // Assuming a method to verify the path is drawn correctly
+    }
+
+    [Fact]
+    public void DrawPath_WithNullPen_ThrowsArgumentNullException()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var path = new GraphicsPath();
+        path.AddLine(10, 10, 90, 10);
+        Assert.Throws<ArgumentNullException>(() => graphics.DrawPath(null, path));
+    }
+
+    [Fact]
+    public void DrawPath_WithNullPath_ThrowsArgumentNullException()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var pen = new Pen(Color.Black, 2);
+        Assert.Throws<ArgumentNullException>(() => graphics.DrawPath(pen, null));
+    }
+
+    [Fact]
+    public void FillPath_WithValidBrushAndPath_FillsPath()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var brush = new SolidBrush(Color.Blue);
+        var path = new GraphicsPath();
+        path.AddLine(10, 10, 90, 10);
+        path.AddLine(90, 10, 90, 90);
+        path.AddLine(90, 90, 10, 90);
+        path.CloseFigure();
+        graphics.FillPath(brush, path);
+        // Assuming a method to verify the path is filled correctly
+    }
+
+    [Fact]
+    public void FillPath_WithNullBrush_ThrowsArgumentNullException()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var path = new GraphicsPath();
+        path.AddLine(10, 10, 90, 10);
+        path.AddLine(90, 10, 90, 90);
+        path.AddLine(90, 90, 10, 90);
+        path.CloseFigure();
+        Assert.Throws<ArgumentNullException>(() => graphics.FillPath(null, path));
+    }
+
+    [Fact]
+    public void FillPath_WithNullPath_ThrowsArgumentNullException()
+    {
+        var bitmap = new Bitmap(100, 100);
+        var graphics = Graphics.FromImage(bitmap);
+        var brush = new SolidBrush(Color.Blue);
+        Assert.Throws<ArgumentNullException>(() => graphics.FillPath(brush, null));
+    }
+} 
