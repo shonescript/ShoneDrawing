@@ -7,6 +7,7 @@ using Shone.Drawing.Text;
 #endif
 using Aprillz.MewUI.Rendering;
 using Aprillz.MewUI;
+using static System.Net.Mime.MediaTypeNames;
 
 #if SystemDrawing
 namespace System.Drawing;
@@ -15,7 +16,7 @@ namespace Shone.Drawing;
 #endif
 public class Graphics : IDisposable
 {
-    public static IGraphicsFactory Factory = Application.DefaultGraphicsFactory;
+    public static IGraphicsFactory Factory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
     private IGraphicsContext graphicsContext;
     private bool disposed;
     private Matrix matrix = new Matrix();
@@ -75,25 +76,25 @@ public class Graphics : IDisposable
 
     public void DrawRectangle(Pen pen, float x, float y, float width, float height)
     {
-        var rect = new Aprillz.MewUI.Rect(x, y, width, height);
+        var rect = new Rect(x, y, width, height);
         graphicsContext.DrawRectangle(rect, pen.Color.ToMewColor(), pen.Width);
     }
 
     public void FillRectangle(Brush brush, float x, float y, float width, float height)
     {
-        var rect = new Aprillz.MewUI.Rect(x, y, width, height);
+        var rect = new Rect(x, y, width, height);
         graphicsContext.FillRectangle(rect, brush.ToMewBrush());
     }
 
     public void DrawEllipse(Pen pen, float x, float y, float width, float height)
     {
-        var bounds = new Aprillz.MewUI.Rect(x, y, width, height);
+        var bounds = new Rect(x, y, width, height);
         graphicsContext.DrawEllipse(bounds, pen.Color.ToMewColor(), pen.Width);
     }
 
     public void FillEllipse(Brush brush, float x, float y, float width, float height)
     {
-        var bounds = new Aprillz.MewUI.Rect(x, y, width, height);
+        var bounds = new Rect(x, y, width, height);
         graphicsContext.FillEllipse(bounds, brush.ToMewBrush());
     }
 
@@ -166,7 +167,7 @@ public class Graphics : IDisposable
             {
                 // 获取路径的边界矩形
                 var bounds = path.GetBounds();
-                var rect = new Aprillz.MewUI.Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
+                var rect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
 
                 // 填充边界矩形
                 graphicsContext.FillRectangle(rect, brush.ToMewBrush());
@@ -178,8 +179,19 @@ public class Graphics : IDisposable
 
     public void DrawImage(Bitmap image, float x, float y)
     {
-        var location = new Aprillz.MewUI.Point(x, y);
-        graphicsContext.DrawImage(image.ToMewImage(), location);
+        graphicsContext.DrawImage(image.ToMewImage(), new Aprillz.MewUI.Point(x, y));
+    }
+
+    public void DrawImage(Bitmap image, float x, float y, float w, float h)
+    {
+        graphicsContext.DrawImage(image.ToMewImage(), new Rect(x, y, w, h));
+    }
+
+    public void DrawImage(Bitmap image, RectangleF dest, RectangleF src, GraphicsUnit unit = GraphicsUnit.Pixel)
+    {
+        graphicsContext.DrawImage(image.ToMewImage(),
+            new Rect(dest.X, dest.Y, dest.Width, dest.Height),
+            new Rect(src.X, src.Y, src.Width, src.Height));
     }
 
     /// <summary>
@@ -187,19 +199,58 @@ public class Graphics : IDisposable
     /// </summary>
     public void DrawString(string text, float x, float y, Color color, float textSize = 16)
     {
-        var bounds = new Aprillz.MewUI.Rect(x, y, float.MaxValue, textSize * 1.5f);
+        var bounds = new Rect(x, y, float.MaxValue, textSize * 1.5f);
 
         var font = Factory.CreateFont("Arial", textSize);
         graphicsContext.DrawText(text.AsSpan(), bounds, font, color.ToMewColor());
     }
 
-    /// <summary>
-    /// Draws text with a Font and Brush, at the given location.
-    /// </summary>
-    public void DrawString(string text, Font font, Brush brush, float x, float y)
+    public void DrawString(string s, Font font, Brush brush, float x, float y, StringFormat? format = null) =>
+        DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, float x, float y, StringFormat? format = null) =>
+        DrawString(s, font, brush, new RectangleF(x, y, 0, 0), format);
+
+    public void DrawString(string s, Font font, Brush brush, PointF point, StringFormat? format = null) =>
+        DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, PointF point, StringFormat? format = null) =>
+        DrawString(s, font, brush, new RectangleF(point.X, point.Y, 0, 0), format);
+
+    public void DrawString(string text, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? fmt = null) =>
+        DrawString(text, font, brush, layoutRectangle, fmt);
+    public void DrawString(ReadOnlySpan<char> s, Font font, Brush brush, RectangleF layoutRectangle, StringFormat? format = null)
     {
-        var bounds = new Aprillz.MewUI.Rect(x, y, float.MaxValue, font.Size * 1.5f);
-        graphicsContext.DrawText(text.AsSpan(), bounds, font.ToMewFont(), brush.Color.ToMewColor());
+        var bounds = new Rect(layoutRectangle.X, layoutRectangle.Y, layoutRectangle.Width, layoutRectangle.Height);
+        if (format == null) format = StringFormat.GenericTypographic;
+        var halign = format.Alignment switch
+        {
+            StringAlignment.Near => TextAlignment.Left,
+            StringAlignment.Far => TextAlignment.Right,
+            _ => TextAlignment.Center
+        };
+        var valign = format.LineAlignment switch
+        {
+            StringAlignment.Near => TextAlignment.Left,
+            StringAlignment.Far => TextAlignment.Right,
+            _ => TextAlignment.Center
+        };
+        var trim = format.Trimming switch
+        {
+            StringTrimming.EllipsisWord => TextTrimming.CharacterEllipsis,
+            _ => TextTrimming.None
+        };
+        var wrap = (format.FormatFlags & StringFormatFlags.NoWrap) > 0 ?
+            TextWrapping.NoWrap :
+            TextWrapping.WrapWithOverflow;
+        graphicsContext.DrawText(
+            s,
+            bounds,
+            font.ToMewFont(),
+            brush.Color.ToMewColor(),
+            halign,
+            valign,
+            wrap,
+            trim
+            );
     }
 
     #endregion
@@ -221,10 +272,41 @@ public class Graphics : IDisposable
     }
 
     public SizeF MeasureString(string? text, Font font, int maxWidth, StringFormat? fmt) => MeasureString(text, font, maxWidth, fmt);
-    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int maxWidth, StringFormat? fmt)
+    public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int maxWidth, StringFormat? format)
     {
-        // to do
-        return MeasureString(text, font, maxWidth);
+        if (format == null) format = StringFormat.GenericTypographic;
+        var halign = format.Alignment switch
+        {
+            StringAlignment.Near => TextAlignment.Left,
+            StringAlignment.Far => TextAlignment.Right,
+            _ => TextAlignment.Center
+        };
+        var valign = format.LineAlignment switch
+        {
+            StringAlignment.Near => TextAlignment.Left,
+            StringAlignment.Far => TextAlignment.Right,
+            _ => TextAlignment.Center
+        };
+        var trim = format.Trimming switch
+        {
+            StringTrimming.EllipsisWord => TextTrimming.CharacterEllipsis,
+            _ => TextTrimming.None
+        };
+        var wrap = (format.FormatFlags & StringFormatFlags.NoWrap) > 0 ?
+            TextWrapping.NoWrap :
+            TextWrapping.WrapWithOverflow;
+        var layout = graphicsContext.CreateTextLayout(text,
+            new TextFormat
+            {
+                Font = font.ToMewFont(),
+                HorizontalAlignment = halign,
+                VerticalAlignment = valign,
+                Wrapping = wrap,
+                Trimming = trim
+            },
+            new TextLayoutConstraints(new Rect(0, 0, maxWidth, double.MaxValue)));
+        var size = layout.MeasuredSize;
+        return new SizeF((float)size.Width, (float)size.Height);
     }
     #endregion
 
@@ -282,5 +364,29 @@ public class Graphics : IDisposable
     public override string ToString()
     {
         return $"Graphics [VisibleClipBounds={VisibleClipBounds}]";
+    }
+
+    public void SetClip(Rectangle r)
+    {
+        //using var path = new GraphicsPath();
+        //path.AddRectangle(r);
+        //SetClip(path);
+    }
+
+    public void SetClip(GraphicsPath g)
+    {
+        // 这里假设当前类内部维护了一个裁剪区域字段，例如：
+        // private GraphicsPath? clipPath;
+        // private Region? clipRegion;
+        //
+        // 兼容 GDI+ 的常见语义：SetClip 是“替换”当前裁剪区域，而不是叠加。
+        //clipPath?.Dispose();
+        //clipPath = (GraphicsPath)g.Clone();
+
+        // 如果你内部是以 Region 作为裁剪实现，可以改为：
+        // clipRegion?.Dispose();
+        // clipRegion = new Region(clipPath);
+
+        // 如果后续绘制逻辑使用 clipPath / clipRegion，请在这里同步更新。
     }
 }
