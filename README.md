@@ -4,7 +4,7 @@ This project aims to produce a MewUI based crossplatform implementation Compatib
 This is an implementation of the methods of System.Drawing in MewUI. It is a work in progress and is not yet complete. The goal is to provide a drop-in replacement for System.Drawing that uses MewUI graphics crossplatform backends for rendering.
 
 # Gloal
-- Performance: should boost by 10~100 times when using Direct2D backend on windows platform.
+- Performance: should boost by several times when using Direct2D backend on windows platform.
 - Crossplatform: support all X11, OpenGL etc. backends by MewUI.
 - Compatability: implements a commonly used subset of interfaces of System.Drawing.Common.
 - publish: one code base, two dlls for different namespace using.
