@@ -262,14 +262,14 @@ public class Graphics : IDisposable
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font)
     {
         var size = graphicsContext.MeasureText(text, font.ToMewFont());
-        return new SizeF((float)size.Width, (float)size.Height);
+        return new SizeF(size.Width, size.Height);
     }
 
     public SizeF MeasureString(string? text, Font font, int maxWidth) => MeasureString(text, font, maxWidth);
     public SizeF MeasureString(ReadOnlySpan<char> text, Font font, int maxWidth)
     {
         var size = graphicsContext.MeasureText(text, font.ToMewFont(), maxWidth);
-        return new SizeF((float)size.Width, (float)size.Height);
+        return new SizeF(size.Width, size.Height);
     }
 
     public SizeF MeasureString(string? text, Font font, int maxWidth, StringFormat? fmt) => MeasureString(text, font, maxWidth, fmt);
@@ -305,9 +305,9 @@ public class Graphics : IDisposable
                 Wrapping = wrap,
                 Trimming = trim
             },
-            new TextLayoutConstraints(new Rect(0, 0, maxWidth, double.MaxValue)));
+            new TextLayoutConstraints(new Rect(0, 0, maxWidth, float.MaxValue)));
         var size = layout.MeasuredSize;
-        return new SizeF((float)size.Width, (float)size.Height);
+        return new SizeF(size.Width, size.Height);
     }
     #endregion
 
@@ -325,7 +325,7 @@ public class Graphics : IDisposable
 
     public void RotateTransform(float degrees)
     {
-        graphicsContext.Rotate(degrees * Math.PI / 180);
+        graphicsContext.Rotate(degrees * MathF.PI / 180);
     }
 
     public void ResetTransform()

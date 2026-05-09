@@ -118,7 +118,7 @@ public struct Point : IEquatable<Point>
 
     public static Point Ceiling(PointF value)
     {
-        return new Point((int)Math.Ceiling(value.X), (int)Math.Ceiling(value.Y));
+        return new Point((int)MathF.Ceiling(value.X), (int)MathF.Ceiling(value.Y));
     }
 
     public static Point Truncate(PointF value)
@@ -128,7 +128,7 @@ public struct Point : IEquatable<Point>
 
     public static Point Round(PointF value)
     {
-        return new Point((int)Math.Round(value.X), (int)Math.Round(value.Y));
+        return new Point((int)MathF.Round(value.X), (int)MathF.Round(value.Y));
     }
 
     public override readonly bool Equals([NotNullWhen(true)] object? obj)

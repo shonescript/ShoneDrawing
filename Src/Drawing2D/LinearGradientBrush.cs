@@ -34,12 +34,12 @@ public class LinearGradientBrush : Brush, IDisposable
 
         float cx = rect.X + rect.Width * 0.5f;
         float cy = rect.Y + rect.Height * 0.5f;
-        float angleRad = angle * (float)(Math.PI / 180.0);
+        float angleRad = angle * MathF.PI / 180f;
 
         // For 45 degrees in a 100x100 rectangle, this gives us the expected 70.71
-        float offset = (float)(Math.Sqrt(2) / 2 * rect.Width);
-        float dx = (float)Math.Cos(angleRad);
-        float dy = (float)Math.Sin(angleRad);
+        float offset = MathF.Sqrt(2) / 2 * rect.Width;
+        float dx = MathF.Cos(angleRad);
+        float dy = MathF.Sin(angleRad);
 
         startPoint = new PointF(cx + offset * dx, cy + offset * dy);
         endPoint = new PointF(cx - offset * dx, cy - offset * dy);
@@ -51,7 +51,7 @@ public class LinearGradientBrush : Brush, IDisposable
     }
 
     public LinearGradientBrush(PointF point1, PointF point2, Color color1, Color color2) :
-        this(RectangleF.FromLTRB(Math.Min(point1.X, point2.X), Math.Min(point1.Y, point2.Y), Math.Max(point1.X, point2.X), Math.Max(point1.Y, point2.Y)),
+        this(RectangleF.FromLTRB(MathF.Min(point1.X, point2.X), MathF.Min(point1.Y, point2.Y), MathF.Max(point1.X, point2.X), MathF.Max(point1.Y, point2.Y)),
             color1, color2, point1.AngleTo(point2))
     {
     }
@@ -92,8 +92,8 @@ public class LinearGradientBrush : Brush, IDisposable
     /// </summary>
     public IBrush ToMewBrush()
     {
-        var start = new Aprillz.MewUI.Point((double)startPoint.X, (double)startPoint.Y);
-        var end = new Aprillz.MewUI.Point((double)endPoint.X, (double)endPoint.Y);
+        var start = new Aprillz.MewUI.Point(startPoint.X, startPoint.Y);
+        var end = new Aprillz.MewUI.Point(endPoint.X, endPoint.Y);
 
         var colors = new Aprillz.MewUI.Color[] { color1.ToMewColor(), color2.ToMewColor() };
         var stops = new GradientStop[]
@@ -140,10 +140,10 @@ public class LinearGradientBrush : Brush, IDisposable
     }
     static PointF calc(float d, PointF v, PointF c, PointF t, PointF n)
     {
-        PointF pointF = scale(v, (float)Math.Pow(1f - d, 3.0));
-        PointF pointF2 = scale(c, (float)(3.0 * Math.Pow(1f - d, 2.0) * (double)d));
-        PointF pointF3 = scale(t, (float)((double)(3f * (1f - d)) * Math.Pow(d, 2.0)));
-        return add(v: scale(n, (float)Math.Pow(d, 3.0)), d: add(add(pointF, pointF2), pointF3));
+        PointF pointF = scale(v, MathF.Pow(1f - d, 3f));
+        PointF pointF2 = scale(c, (3f * MathF.Pow(1f - d, 2f) * d));
+        PointF pointF3 = scale(t, ((3f * (1f - d)) * MathF.Pow(d, 2f)));
+        return add(v: scale(n, MathF.Pow(d, 3f)), d: add(add(pointF, pointF2), pointF3));
     }
     internal static Blend SigmaBell(float focus, float scale)
     {

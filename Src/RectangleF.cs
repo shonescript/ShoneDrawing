@@ -251,10 +251,10 @@ public struct RectangleF : IEquatable<RectangleF>
 
     public static RectangleF Intersect(RectangleF a, RectangleF b)
     {
-        float num = Math.Max(a.X, b.X);
-        float num2 = Math.Min(a.X + a.Width, b.X + b.Width);
-        float num3 = Math.Max(a.Y, b.Y);
-        float num4 = Math.Min(a.Y + a.Height, b.Y + b.Height);
+        float num = MathF.Max(a.X, b.X);
+        float num2 = MathF.Min(a.X + a.Width, b.X + b.Width);
+        float num3 = MathF.Max(a.Y, b.Y);
+        float num4 = MathF.Min(a.Y + a.Height, b.Y + b.Height);
         if (num2 >= num && num4 >= num3)
         {
             return new RectangleF(num, num3, num2 - num, num4 - num3);
@@ -273,10 +273,10 @@ public struct RectangleF : IEquatable<RectangleF>
 
     public static RectangleF Union(RectangleF a, RectangleF b)
     {
-        float num = Math.Min(a.X, b.X);
-        float num2 = Math.Max(a.X + a.Width, b.X + b.Width);
-        float num3 = Math.Min(a.Y, b.Y);
-        float num4 = Math.Max(a.Y + a.Height, b.Y + b.Height);
+        float num = MathF.Min(a.X, b.X);
+        float num2 = MathF.Max(a.X + a.Width, b.X + b.Width);
+        float num3 = MathF.Min(a.Y, b.Y);
+        float num4 = MathF.Max(a.Y + a.Height, b.Y + b.Height);
         return new RectangleF(num, num3, num2 - num, num4 - num3);
     }
 

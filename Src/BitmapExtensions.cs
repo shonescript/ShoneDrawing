@@ -43,15 +43,15 @@ public static class BitmapExtensions
                     break;
                 case 1: // 90
                     context.Translate(newW, 0); // shift right
-                    context.Rotate(Math.PI / 2);
+                    context.Rotate(MathF.PI / 2);
                     break;
                 case 2: // 180
                     context.Translate(newW, newH);
-                    context.Rotate(Math.PI);
+                    context.Rotate(MathF.PI);
                     break;
                 case 3: // 270
                     context.Translate(0, newH);
-                    context.Rotate(3 * Math.PI / 2);
+                    context.Rotate(3 * MathF.PI / 2);
                     break;
             }
 
