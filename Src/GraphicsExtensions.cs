@@ -187,7 +187,23 @@ public static class GraphicsExtensions
         );
     }
 
-    public static void DrawLines(this Graphics g, Pen p, Point[] points)
+    public static void DrawLines(this Graphics g, Pen p, params Point[] points)
+    {
+        if (points.Length < 2)
+            return;
+
+        for (int i = 0; i < points.Length - 1; i++)
+        {
+            float x1 = points[i].X;
+            float y1 = points[i].Y;
+            float x2 = points[i + 1].X;
+            float y2 = points[i + 1].Y;
+
+            g.DrawLine(p, x1, y1, x2, y2);
+        }
+    }
+
+    public static void DrawLines(this Graphics g, Pen p, params PointF[] points)
     {
         if (points.Length < 2)
             return;

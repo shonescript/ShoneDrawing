@@ -108,9 +108,7 @@ public class Graphics : IDisposable
 
         var points = path.Points;
         var types = path.Types;
-
-        if (points.Length == 0)
-            return;
+        if (points.Length == 0) return;
 
         // 处理路径的绘制
         int i = 0;
