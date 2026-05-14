@@ -21,10 +21,10 @@ public class Font : IDisposable
     private string familyName;
 
     public IFont IFont => mewFont;
-    public double Ascent => mewFont.Ascent;
-    public double Descent => mewFont.Descent;
-    public double InternalLeading => mewFont.InternalLeading;
-    public double CapHeight => mewFont.CapHeight;
+    public float Ascent => mewFont.Ascent;
+    public float Descent => mewFont.Descent;
+    public float InternalLeading => mewFont.InternalLeading;
+    public float CapHeight => mewFont.CapHeight;
 
     /// <summary>
     /// Initializes a new Font with the specified family name, size, and style.
