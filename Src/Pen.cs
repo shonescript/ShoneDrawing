@@ -43,7 +43,7 @@ public class Pen: IDisposable
     public IPen ToMewPen()
     {
         
-        return Graphics.Factory.CreatePen(Color.ToMewColor(), Width);
+        return Graphics.Factory.CreatePen(Color.MewColor, Width);
     }
 
     public void Dispose()

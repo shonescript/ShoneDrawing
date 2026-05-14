@@ -95,7 +95,7 @@ public class LinearGradientBrush : Brush, IDisposable
         var start = new Aprillz.MewUI.Point(startPoint.X, startPoint.Y);
         var end = new Aprillz.MewUI.Point(endPoint.X, endPoint.Y);
 
-        var colors = new Aprillz.MewUI.Color[] { color1.ToMewColor(), color2.ToMewColor() };
+        var colors = new Aprillz.MewUI.Color[] { color1.MewColor, color2.MewColor };
         var stops = new GradientStop[]
         {
             new GradientStop(0.0f, colors[0]),

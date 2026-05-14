@@ -226,7 +226,7 @@ public static class GraphicsExtensions
 
         var bounds = new Aprillz.MewUI.Rect(point.X, point.Y, float.MaxValue, font.Size * 1.5f);
 
-        context.DrawText(text.AsSpan(), bounds, font.ToMewFont(), brush.Color.ToMewColor());
+        context.DrawText(text.AsSpan(), bounds, font.ToMewFont(), brush.Color.MewColor);
     }
 
     public static void DrawRectangle(this Graphics g, Pen p, Rectangle r)
@@ -236,7 +236,7 @@ public static class GraphicsExtensions
 
         var rect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
 
-        context.DrawRectangle(rect, p.Color.ToMewColor(), p.Width);
+        context.DrawRectangle(rect, p.Color.MewColor, p.Width);
     }
 
     public static void FillRectangle(this Graphics g, SolidBrush b, RectangleF r)

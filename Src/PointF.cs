@@ -52,6 +52,8 @@ public struct PointF : IEquatable<PointF>
         }
     }
 
+    public Aprillz.MewUI.Point MewPoint => new Aprillz.MewUI.Point(X, Y);
+
     public Vector2 Vector2 => new Vector2(X, Y);
 
     public PointF(float x, float y)

@@ -65,38 +65,38 @@ public class Graphics : IDisposable
 
     public void Clear(Color c)
     {
-        graphicsContext.Clear(c.ToMewColor());
+        graphicsContext.Clear(c.MewColor);
     }
 
     public void DrawLine(Pen pen, float x1, float y1, float x2, float y2)
     {
         var start = new Aprillz.MewUI.Point(x1, y1);
         var end = new Aprillz.MewUI.Point(x2, y2);
-        graphicsContext.DrawLine(start, end, pen.Color.ToMewColor(), pen.Width);
+        graphicsContext.DrawLine(start, end, pen.Color.MewColor, pen.Width);
     }
 
     public void DrawRectangle(Pen pen, float x, float y, float width, float height)
     {
         var rect = new Rect(x, y, width, height);
-        graphicsContext.DrawRectangle(rect, pen.Color.ToMewColor(), pen.Width);
+        graphicsContext.DrawRectangle(rect, pen.Color.MewColor, pen.Width);
     }
 
     public void FillRectangle(Brush brush, float x, float y, float width, float height)
     {
         var rect = new Rect(x, y, width, height);
-        graphicsContext.FillRectangle(rect, brush.ToMewBrush());
+        graphicsContext.FillRectangle(rect, brush.MewBrush);
     }
 
     public void DrawEllipse(Pen pen, float x, float y, float width, float height)
     {
         var bounds = new Rect(x, y, width, height);
-        graphicsContext.DrawEllipse(bounds, pen.Color.ToMewColor(), pen.Width);
+        graphicsContext.DrawEllipse(bounds, pen.Color.MewColor, pen.Width);
     }
 
     public void FillEllipse(Brush brush, float x, float y, float width, float height)
     {
         var bounds = new Rect(x, y, width, height);
-        graphicsContext.FillEllipse(bounds, brush.ToMewBrush());
+        graphicsContext.FillEllipse(bounds, brush.MewBrush);
     }
 
     public void DrawPath(Pen pen, GraphicsPath path)
@@ -105,40 +105,7 @@ public class Graphics : IDisposable
             throw new ArgumentNullException(nameof(pen));
         if (path == null)
             throw new ArgumentNullException(nameof(path));
-
-        var points = path.Points;
-        var types = path.Types;
-        if (points.Length == 0) return;
-
-        // 处理路径的绘制
-        int i = 0;
-        while (i < points.Length)
-        {
-            int start = i;
-            while (i < points.Length && (types[i] & 0x80) == 0)
-                i++;
-
-            if (i > start)
-            {
-                // 绘制一条线段或曲线
-                for (int j = start; j < i - 1; j++)
-                {
-                    var p1 = new Aprillz.MewUI.Point(points[j].X, points[j].Y);
-                    var p2 = new Aprillz.MewUI.Point(points[j + 1].X, points[j + 1].Y);
-                    graphicsContext.DrawLine(p1, p2, pen.Color.ToMewColor(), pen.Width);
-                }
-
-                // 如果是闭合路径，连接最后一个点和第一个点
-                if ((types[i - 1] & 0x80) != 0 && i > start + 1)
-                {
-                    var p1 = new Aprillz.MewUI.Point(points[i - 1].X, points[i - 1].Y);
-                    var p2 = new Aprillz.MewUI.Point(points[start].X, points[start].Y);
-                    graphicsContext.DrawLine(p1, p2, pen.Color.ToMewColor(), pen.Width);
-                }
-            }
-
-            i++;
-        }
+        graphicsContext.DrawPath(path.MewPath, pen.Color.MewColor, pen.Width);
     }
 
     public void FillPath(Brush brush, GraphicsPath path)
@@ -147,33 +114,7 @@ public class Graphics : IDisposable
             throw new ArgumentNullException(nameof(brush));
         if (path == null)
             throw new ArgumentNullException(nameof(path));
-
-        var points = path.Points;
-        var types = path.Types;
-
-        if (points.Length < 3)
-            return;
-
-        // 处理路径的填充
-        int i = 0;
-        while (i < points.Length)
-        {
-            int start = i;
-            while (i < points.Length && (types[i] & 0x80) == 0)
-                i++;
-
-            if (i > start + 2)
-            {
-                // 获取路径的边界矩形
-                var bounds = path.GetBounds();
-                var rect = new Rect(bounds.X, bounds.Y, bounds.Width, bounds.Height);
-
-                // 填充边界矩形
-                graphicsContext.FillRectangle(rect, brush.ToMewBrush());
-            }
-
-            i++;
-        }
+        graphicsContext.FillPath(path.MewPath, brush.MewBrush);
     }
 
     public void DrawImage(Bitmap image, float x, float y)
@@ -201,7 +142,7 @@ public class Graphics : IDisposable
         var bounds = new Rect(x, y, float.MaxValue, textSize * 1.5f);
 
         var font = Factory.CreateFont("Arial", textSize);
-        graphicsContext.DrawText(text.AsSpan(), bounds, font, color.ToMewColor());
+        graphicsContext.DrawText(text.AsSpan(), bounds, font, color.MewColor);
     }
 
     public void DrawString(string s, Font font, Brush brush, float x, float y, StringFormat? format = null) =>
@@ -244,7 +185,7 @@ public class Graphics : IDisposable
             s,
             bounds,
             font.ToMewFont(),
-            brush.Color.ToMewColor(),
+            brush.Color.MewColor,
             halign,
             valign,
             wrap,

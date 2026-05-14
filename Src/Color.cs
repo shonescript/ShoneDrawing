@@ -16,6 +16,12 @@ public struct Color
     private readonly byte _blue;
     private readonly string _name;
 
+    /// <summary>
+    /// Converts this Color to MewUI Color.
+    /// </summary>
+    public Aprillz.MewUI.Color MewColor =>
+        Aprillz.MewUI.Color.FromArgb(A, R, G, B);
+
     #region Private Constructor
 
     /// <summary>
@@ -281,14 +287,6 @@ public struct Color
     #endregion
 
     #region Conversion
-
-    /// <summary>
-    /// Converts this Color to MewUI Color.
-    /// </summary>
-    public Aprillz.MewUI.Color ToMewColor()
-    {
-        return Aprillz.MewUI.Color.FromArgb(A, R, G, B);
-    }
 
     /// <summary>
     /// Returns the ARGB value as a 32-bit integer (0xAARRGGBB).

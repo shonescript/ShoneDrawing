@@ -36,7 +36,7 @@ public sealed class SolidBrush : Brush, IDisposable
             throw new ObjectDisposedException(nameof(SolidBrush));
 
         
-        return Graphics.Factory.CreateSolidColorBrush(Color.ToMewColor());
+        return Graphics.Factory.CreateSolidColorBrush(Color.MewColor);
     }
 
     /// <summary>

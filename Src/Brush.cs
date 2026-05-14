@@ -12,6 +12,12 @@ public class Brush : IDisposable
 {
     public Color Color { get; set; }
 
+    /// <summary>
+    /// Converts this Brush to MewUI IBrush.
+    /// </summary>
+    public ISolidColorBrush MewBrush =>
+        Graphics.Factory.CreateSolidColorBrush(Color.MewColor);
+
     public Brush()
     {
         Color = Color.Black;
@@ -20,15 +26,6 @@ public class Brush : IDisposable
     public Brush(Color color)
     {
         Color = color;
-    }
-
-    /// <summary>
-    /// Converts this Brush to MewUI IBrush.
-    /// </summary>
-    public ISolidColorBrush ToMewBrush()
-    {
-        
-        return Graphics.Factory.CreateSolidColorBrush(Color.ToMewColor());
     }
 
     public void Dispose()

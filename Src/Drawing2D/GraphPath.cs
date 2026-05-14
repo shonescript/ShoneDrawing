@@ -1,6 +1,8 @@
 #if SystemDrawing
 namespace System.Drawing.Drawing2D;
 #else
+using Aprillz.MewUI.Rendering;
+
 namespace Shone.Drawing.Drawing2D;
 #endif
 
@@ -49,26 +51,48 @@ public class GraphicsPath : IDisposable, ICloneable
     {
         get
         {
-            var result = new List<PointF>(points.Count);
-
-            for (int i = 0; i < points.Count; i++)
-            {
-                byte type = (byte)(types[i] & 0x07);
-
-                if (type == 3)
-                {
-                    // Bezier 控制点 / 曲线点本身都直接返回
-                    result.Add(points[i]);
-                }
-                else
-                {
-                    result.Add(points[i]);
-                }
-            }
-
-            return result.ToArray();
+            return points.ToArray();
         }
     }
+
+    public PathGeometry MewPath
+    {
+        get
+        {
+            var n = points.Count;
+            var path = new PathGeometry();
+            for (int i = 0; i < n; i++)
+            {
+                var p = points[i];
+                var type = types[i] & 0x07;
+                switch (type)
+                {
+                    case 0:
+                        path.MoveTo(p.X, p.Y);
+                        break;
+                    case 1:
+                        path.LineTo(p.X, p.Y);
+                        break;
+                    case 3:
+                        var j = i + 1;
+                        if (j < n && (types[j] & 0x07) == 3)
+                        {
+                            var p1 = points[j];
+                            var k = i + 2;
+                            if (k < n && (types[k] & 0x07) == 3)
+                            {
+                                var p2 = points[k];
+                                path.BezierTo(p.X, p.Y, p1.X, p1.Y, p2.X, p2.Y);
+                                i += 2;
+                            }
+                        }
+                        break;
+                }
+            }
+            return path;
+        }
+    }
+
 
     public GraphicsPath()
         : this(FillMode.Alternate)
@@ -121,14 +145,13 @@ public class GraphicsPath : IDisposable, ICloneable
 
     public void CloseFigure()
     {
-        if (points.Count == 0)
-            return;
+        var n = points.Count;
+        if (n == 0) return;
 
-        int start = GetFigureStartIndex(points.Count - 1);
-        if (start < 0)
-            return;
+        int start = GetFigureStartIndex(n - 1);
+        if (start < 0) return;
 
-        if (points.Count > start)
+        if (n > start)
         {
             var first = points[start];
             var last = points[^1];
@@ -144,17 +167,17 @@ public class GraphicsPath : IDisposable, ICloneable
 
     public void CloseAllFigures()
     {
-        if (points.Count == 0)
-            return;
+        var n = points.Count;
+        if (n == 0) return;
 
         int i = 0;
-        while (i < points.Count)
+        while (i < n)
         {
             int start = i;
-            while (i < points.Count && (types[i] & 0x80) == 0)
+            while (i < n && (types[i] & 0x80) == 0)
                 i++;
 
-            if (i < points.Count)
+            if (i < n)
             {
                 if (points[start] != points[i])
                 {
@@ -211,7 +234,7 @@ public class GraphicsPath : IDisposable, ICloneable
         AddLine(new PointF(x1, y1), new PointF(x2, y2));
     }
 
-    public void AddLines(PointF[] points)
+    public void AddLines(params PointF[] points)
     {
         if (points is null)
             throw new ArgumentNullException(nameof(points));
@@ -404,10 +427,8 @@ public class GraphicsPath : IDisposable, ICloneable
         {
             points.Add(pts[i]);
             byte t = (byte)type;
-            if (i == 0)
-                t |= (byte)PathPointType.Start;
-            if (i == pts.Length - 1)
-                t |= 0x80;
+            if (i == 0) t = (byte)PathPointType.Start;
+            if (i == pts.Length - 1) t |= 0x80;
             types.Add(t);
         }
     }
