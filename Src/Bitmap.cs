@@ -14,26 +14,20 @@ namespace Shone.Drawing;
 #endif
 public class Bitmap : Image
 {
-    private IImage image;
     private IBitmapRenderTarget renderTarget;
-
-    private float horizontalResolution = 96.0f;
-    private float verticalResolution   = 96.0f;
 
     #region Constructors
 
     public Bitmap(int width, int height)
-    {        
+    {
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
-        image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
+        mewImage = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
         PixelFormat = PixelFormat.Format32bppArgb;
     }
 
     public Bitmap(string fileName)
     {
-        var bytes = File.ReadAllBytes(fileName);
-        
-        image = Graphics.Factory.CreateImageFromBytes(bytes);
+        mewImage = Graphics.Factory.CreateImageFromFile(fileName);
         PixelFormat = PixelFormat.Format32bppArgb;
     }
 
@@ -42,28 +36,28 @@ public class Bitmap : Image
         using var ms = new MemoryStream();
         stream.CopyTo(ms);
         var bytes = ms.ToArray();
-        
-        image = Graphics.Factory.CreateImageFromBytes(bytes);
+
+        mewImage = Graphics.Factory.CreateImageFromBytes(bytes);
         PixelFormat = PixelFormat.Format32bppArgb;
     }
 
     public Bitmap(Bitmap b, Size s)
     {
-        
+
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(s.Width, s.Height);
         using (var context = Graphics.Factory.CreateContext(renderTarget))
         {
             var destRect = new Aprillz.MewUI.Rect(0, 0, s.Width, s.Height);
-            context.DrawImage(b.image, destRect);
+            context.DrawImage(b.mewImage, destRect);
         }
-        image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
+        mewImage = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
 
         horizontalResolution = b.horizontalResolution;
-        verticalResolution   = b.verticalResolution;
-        
+        verticalResolution = b.verticalResolution;
+
         PixelFormat = b.PixelFormat;
     }
-    
+
     /// <summary>
     /// Creates a Bitmap of the given width/height in the specified PixelFormat.
     /// In this simplified example, we primarily handle PixelFormat.Format32bppArgb 
@@ -78,9 +72,9 @@ public class Bitmap : Image
                 $"Only Format32bppArgb is supported in this constructor, but got {format}."
             );
 
-        
+
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
-        image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
+        mewImage = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
         PixelFormat = format;
     }
 
@@ -90,25 +84,25 @@ public class Bitmap : Image
     /// The raw data is copied into this bitmap’s internal buffer.
     /// </summary>
     public Bitmap(int width, int height, int stride, PixelFormat p, IntPtr scan0)
-    {        
+    {
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
-        image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
+        mewImage = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
         PixelFormat = p;
     }
 
     public Bitmap(Bitmap b, int width, int height)
-    {        
+    {
         renderTarget = Graphics.Factory.CreateBitmapRenderTarget(width, height);
         using (var context = Graphics.Factory.CreateContext(renderTarget))
         {
             var destRect = new Aprillz.MewUI.Rect(0, 0, width, height);
-            context.DrawImage(b.image, destRect);
+            context.DrawImage(b.mewImage, destRect);
         }
-        image = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
+        mewImage = Graphics.Factory.CreateImageFromPixelSource(renderTarget);
 
         horizontalResolution = b.horizontalResolution;
-        verticalResolution   = b.verticalResolution;
-        
+        verticalResolution = b.verticalResolution;
+
         PixelFormat = b.PixelFormat;
     }
 
@@ -120,7 +114,7 @@ public class Bitmap : Image
     {
         get
         {
-            return image.PixelWidth;
+            return mewImage.PixelWidth;
         }
     }
 
@@ -128,7 +122,7 @@ public class Bitmap : Image
     {
         get
         {
-            return image.PixelHeight;
+            return mewImage.PixelHeight;
         }
     }
 
@@ -187,10 +181,10 @@ public class Bitmap : Image
     public Bitmap Clone()
     {
         var newBitmap = new Bitmap(Width, Height);
-        
+
         using (var context = Graphics.Factory.CreateContext(newBitmap.renderTarget))
         {
-            context.DrawImage(image, new Aprillz.MewUI.Point(0, 0));
+            context.DrawImage(mewImage, new Aprillz.MewUI.Point(0, 0));
         }
         newBitmap.HorizontalResolution = this.horizontalResolution;
         newBitmap.VerticalResolution = this.verticalResolution;
@@ -205,12 +199,12 @@ public class Bitmap : Image
     public Bitmap Clone(Rectangle r, PixelFormat f)
     {
         var newBitmap = new Bitmap(r.Width, r.Height, f);
-        
+
         using (var context = Graphics.Factory.CreateContext(newBitmap.renderTarget))
         {
             var srcRect = new Aprillz.MewUI.Rect(r.X, r.Y, r.Width, r.Height);
             var dstRect = new Aprillz.MewUI.Rect(0, 0, r.Width, r.Height);
-            context.DrawImage(image, dstRect, srcRect);
+            context.DrawImage(mewImage, dstRect, srcRect);
         }
         newBitmap.HorizontalResolution = this.horizontalResolution;
         newBitmap.VerticalResolution = this.verticalResolution;
@@ -236,19 +230,9 @@ public class Bitmap : Image
 
     #region Save Methods
 
-    public void Save(string fileName, ImageFormat format, int quality = 100)
-    {
-        throw new NotImplementedException("Save is not implemented for MewUI Bitmap");
-    }
-    
     public void Save(string fileName)
     {
         Save(fileName, ImageFormat.Png);
-    }
-
-    public void Save(Stream stream, ImageFormat format, int quality = 100)
-    {
-        throw new NotImplementedException("Save is not implemented for MewUI Bitmap");
     }
 
     public void Save(MemoryStream s, ImageFormat f)
@@ -262,7 +246,7 @@ public class Bitmap : Image
 
     public IImage ToMewImage()
     {
-        return image;
+        return mewImage;
     }
 
     public IRenderTarget ToRenderTarget()
@@ -277,19 +261,19 @@ public class Bitmap : Image
     public void SetResolution(float horizontal, float vertical)
     {
         horizontalResolution = horizontal;
-        verticalResolution   = vertical;
+        verticalResolution = vertical;
     }
 
     #endregion
 
     #region IDisposable
 
-    public void Dispose()
+    public override void Dispose()
     {
-        if (image != null)
+        if (mewImage != null)
         {
-            image.Dispose();
-            image = null;
+            mewImage.Dispose();
+            mewImage = null;
         }
         if (renderTarget != null)
         {
@@ -302,9 +286,7 @@ public class Bitmap : Image
 
     public override string ToString()
     {
-        if (image == null)
-            return "Bitmap: Disposed";
-
+        if (mewImage == null) return "Bitmap: Disposed";
         return $"Bitmap: {Width} x {Height}, Stride: {Stride} bytes, DPI: {horizontalResolution}x{verticalResolution}";
     }
 

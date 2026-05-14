@@ -22,16 +22,12 @@ public class Image : IDisposable
     protected float horizontalResolution = 96.0f;
     protected float verticalResolution = 96.0f;
 
-    private bool disposed;
-    
     public PixelFormat PixelFormat { get; set; }
 
     #region Constructors
 
     protected Image()
     {
-        // Empty or internal usage.
-        PixelFormat = PixelFormat.Format32bppArgb;
     }
 
     /// <summary>
@@ -49,7 +45,7 @@ public class Image : IDisposable
     public static Image FromFile(string filename)
     {
         var bytes = File.ReadAllBytes(filename);
-        
+
         IImage img = Graphics.Factory.CreateImageFromBytes(bytes);
         if (img == null)
             throw new Exception($"Failed to decode image from file: {filename}");
@@ -63,7 +59,7 @@ public class Image : IDisposable
         using var ms = new MemoryStream();
         stream.CopyTo(ms);
         var bytes = ms.ToArray();
-        
+
         IImage img = Graphics.Factory.CreateImageFromBytes(bytes);
         if (img == null)
             throw new Exception("Failed to decode image from stream.");
@@ -108,12 +104,12 @@ public class Image : IDisposable
 
     #region Save Methods
 
-    public virtual void Save(string filename, ImageFormat format, int quality = 100)
+    public void Save(string filename, ImageFormat format, int quality = 100)
     {
         throw new NotImplementedException("Save is not implemented for MewUI Image");
     }
 
-    public virtual void Save(Stream stream, ImageFormat format, int quality = 100)
+    public void Save(Stream stream, ImageFormat format, int quality = 100)
     {
         throw new NotImplementedException("Save is not implemented for MewUI Image");
     }
@@ -156,16 +152,12 @@ public class Image : IDisposable
 
     #region Disposal
 
-    public void Dispose()
+    public virtual void Dispose()
     {
-        if (!disposed)
+        if (mewImage != null)
         {
-            disposed = true;
-            if (mewImage != null)
-            {
-                mewImage.Dispose();
-                mewImage = null;
-            }
+            mewImage.Dispose();
+            mewImage = null;
         }
     }
 
@@ -180,7 +172,7 @@ public class Image : IDisposable
 
     public override string ToString()
     {
-        if (disposed) return "Image [Disposed]";
+        if (mewImage == null) return "Image [disposed]";
         return $"Image [Width={Width}, Height={Height}, DPI={HorizontalResolution}x{VerticalResolution}]";
     }
 
