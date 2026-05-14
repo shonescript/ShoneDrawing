@@ -104,14 +104,12 @@ public class Image : IDisposable
 
     #region Save Methods
 
-    public void Save(string filename, ImageFormat format, int quality = 100)
-    {
-        throw new NotImplementedException("Save is not implemented for MewUI Image");
+    public virtual void Save(string filename, ImageFormat format, int quality = 100)
+    {        
     }
 
-    public void Save(Stream stream, ImageFormat format, int quality = 100)
+    public virtual void Save(Stream stream, ImageFormat format, int quality = 100)
     {
-        throw new NotImplementedException("Save is not implemented for MewUI Image");
     }
 
     #endregion

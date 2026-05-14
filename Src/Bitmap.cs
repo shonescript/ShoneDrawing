@@ -6,6 +6,8 @@ using Shone.Drawing.Drawing2D;
 using Shone.Drawing.Imaging;
 #endif
 using Aprillz.MewUI.Rendering;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
 
 #if SystemDrawing
 namespace System.Drawing;
@@ -162,13 +164,17 @@ public class Bitmap : Image
 
     public Color GetPixel(int x, int y)
     {
-        // TODO: Implement GetPixel for MewUI
-        return Color.Black;
+        var span = renderTarget.GetPixelSpan().Slice(y * 4 + x);
+        return Color.FromArgb(span[0], span[1], span[2], span[3]);
     }
 
     public void SetPixel(int x, int y, Color color)
     {
-        // TODO: Implement SetPixel for MewUI
+        var span = renderTarget.GetPixelSpan().Slice(y * 4 + x);
+        span[0] = color.A;
+        span[1] = color.R;
+        span[2] = color.G;
+        span[3] = color.B;
     }
 
     #endregion
@@ -216,10 +222,20 @@ public class Bitmap : Image
 
     #region LockBits / UnlockBits
 
-    public BitmapData LockBits(Rectangle r, ImageLockMode m, PixelFormat f)
+    unsafe public BitmapData LockBits(Rectangle r, ImageLockMode m, PixelFormat f)
     {
-        // TODO: Implement LockBits for MewUI
-        throw new NotImplementedException("LockBits is not implemented for MewUI Bitmap");
+        if (mewImage == null || renderTarget == null) return null;
+        var span = renderTarget.GetPixelSpan();
+        var w = mewImage.PixelWidth;
+        return new BitmapData
+        {
+            Scan0 = new nint(Unsafe.AsPointer(ref MemoryMarshal.AsRef<byte>(span))),
+            Stride = 4 * w,
+            Width = w,
+            Height = mewImage.PixelHeight,
+            PixelFormat = f,
+            LockMode = m
+        };
     }
 
     public void UnlockBits(BitmapData bmData)
@@ -229,6 +245,16 @@ public class Bitmap : Image
     #endregion
 
     #region Save Methods
+
+    public override void Save(string filename, ImageFormat format, int quality = 100)
+    {
+        // to do        
+    }
+
+    public override void Save(Stream stream, ImageFormat format, int quality = 100)
+    {
+        // to do
+    }
 
     public void Save(string fileName)
     {
