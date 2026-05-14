@@ -15,9 +15,7 @@ namespace Shone.Drawing;
 #endif
 public class Graphics : IDisposable
 {
-    static IGraphicsFactory defaultFactory = Aprillz.MewUI.Application.DefaultGraphicsFactory;
-    public static IGraphicsFactory realdrawFactory;
-    public static IGraphicsFactory Factory => realdrawFactory ?? defaultFactory;
+    public static IGraphicsFactory Factory => Aprillz.MewUI.Application.DefaultGraphicsFactory;
     private IGraphicsContext graphicsContext;
     private bool disposed;
     private Matrix matrix = new Matrix();
@@ -284,11 +282,6 @@ public class Graphics : IDisposable
             return new RectangleF(0, 0, 10000, 10000);
         }
     }
-
-    public static IGraphicsFactory RealdrawFactory { get => realdrawFactory; set => realdrawFactory = value; }
-    public static IGraphicsFactory RealdrawFactory1 { get => realdrawFactory; set => realdrawFactory = value; }
-    public static IGraphicsFactory RealdrawFactory2 { get => realdrawFactory; set => realdrawFactory = value; }
-
     #endregion
 
     #region Disposal
