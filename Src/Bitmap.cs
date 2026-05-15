@@ -128,18 +128,6 @@ public class Bitmap : Image
         }
     }
 
-    public float HorizontalResolution
-    {
-        get => horizontalResolution;
-        set => horizontalResolution = value;
-    }
-
-    public float VerticalResolution
-    {
-        get => verticalResolution;
-        set => verticalResolution = value;
-    }
-
     public IntPtr Scan0
     {
         get

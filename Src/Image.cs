@@ -22,6 +22,8 @@ public class Image : IDisposable
     protected float horizontalResolution = 96.0f;
     protected float verticalResolution = 96.0f;
 
+    public IImage MewImage => mewImage;
+
     public PixelFormat PixelFormat { get; set; }
 
     #region Constructors

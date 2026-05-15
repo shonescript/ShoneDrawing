@@ -7,6 +7,7 @@ using Shone.Drawing.Text;
 #endif
 using Aprillz.MewUI.Rendering;
 using Aprillz.MewUI;
+using Aprillz.MewUI.Rendering.Direct2D;
 
 #if SystemDrawing
 namespace System.Drawing;
@@ -15,7 +16,9 @@ namespace Shone.Drawing;
 #endif
 public class Graphics : IDisposable
 {
-    public static IGraphicsFactory Factory => Aprillz.MewUI.Application.DefaultGraphicsFactory;
+    public static Direct2DGraphicsFactory Factory => Direct2DGraphicsFactory.Instance;
+    public static IGraphicsFactory IGraphicsFactory => Direct2DGraphicsFactory.Instance;
+
     private IGraphicsContext graphicsContext;
     private bool disposed;
     private Matrix matrix = new Matrix();
@@ -54,7 +57,6 @@ public class Graphics : IDisposable
     public static Graphics FromImage(Bitmap bitmap)
     {
         var renderTarget = bitmap.ToRenderTarget();
-
         var context = Factory.CreateContext(renderTarget);
         return new Graphics(context);
     }

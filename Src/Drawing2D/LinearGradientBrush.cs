@@ -101,9 +101,7 @@ public class LinearGradientBrush : Brush, IDisposable
             new GradientStop(0.0f, colors[0]),
             new GradientStop(1.0f, colors[1])
         };
-
-
-        return Graphics.Factory.CreateLinearGradientBrush(start, end, stops);
+        return Graphics.IGraphicsFactory.CreateLinearGradientBrush(start, end, stops);
     }
 
     #region Dispose
